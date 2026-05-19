@@ -3,11 +3,11 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define MAXN 11
+#define MAXN 15
 #define MAXCNT 678570 // B11, 第11个贝尔数
 
-int n, rgs[MAXN + 5], cnt = 0;
-char str[MAXN + 5], res[MAXCNT][2 * MAXN + 5], tmp[2 * MAXN + 5];
+int n, rgs[MAXN], cnt = 0;
+char str[MAXN], res[MAXCNT][2 * MAXN], tmp[2 * MAXN];
 
 void dfs(int pos, int part) 
 {
