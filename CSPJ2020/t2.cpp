@@ -1,33 +1,27 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-constexpr int N = 100005;
+// 桶排序
 
-int n, w, score[N];
-vector<int> a;
+constexpr int MAXS = 610;
+int n, w, cnt[MAXS];
 
 int main() {
     cin.tie(nullptr)->sync_with_stdio(false);
     cin >> n >> w;
-    for (int i = 0; i < n; ++i) 
-        cin >> score[i];
-    for (int i = 0; i < n; ++i) {
-        int tmp = score[i];
-        if (a.empty()) 
-            a.push_back(tmp);
-        else {
-            if (tmp >= a[0]) 
-                a.insert(a.begin(), tmp);
-            else if (tmp <= a[i-1]) 
-                a.push_back(tmp);
-            else {
-                a.push_back(tmp);
-                sort(a.begin(), a.end(), greater<int>());
-            }
+    memset(cnt, 0, sizeof(cnt));
+    int maxs = -1, score;
+    for (int i = 1; i <= n; ++i) {
+        cin >> score;
+        maxs = max(maxs, score);
+        ++cnt[score];
+        int p = max(1, i * w / 100);
+        int k = 0, s = maxs;
+        while (k < p) {
+            k += cnt[s];
+            --s;
         }
-        int p = max(1, (i + 1) * w / 100);
-        int s = a[p-1];
-        cout << s << ' ';
+        cout << (s + 1) << ' ';
     }
     return 0;
 }
