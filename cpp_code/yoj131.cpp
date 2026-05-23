@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-array<int, 10> singlecnt = {{ 6, 2, 5, 5, 4, 5, 6, 3, 7, 6 }};
+int singlecnt[10] = {6, 2, 5, 5, 4, 5, 6, 3, 7, 6};
 
 int stickcnt(int num) {
     if (num == 0) 

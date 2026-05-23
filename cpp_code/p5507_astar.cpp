@@ -9,10 +9,9 @@ struct Node {
     ll code;
     int op;
     int g, h, f;
-    Node(ll code, int op, int g, int h): 
-        code(code), op(op), g(g), h(h) {
-            f = g + h;
-        }
+    Node(ll code, int op, int g, int h): code(code), op(op), g(g), h(h) {
+        f = g + h;
+    }
 };
 
 struct NodeCmp {

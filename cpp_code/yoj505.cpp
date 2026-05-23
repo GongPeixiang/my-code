@@ -3,7 +3,7 @@ using namespace std;
 
 struct Student {
     long long num;
-    vector <int> score;
+    vector<int> score;
 };
 
 int main() {

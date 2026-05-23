@@ -1,40 +1,39 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int MIN = numeric_limits<int>::min();
-const array<array<int, 2>, 3> dir = {{ {0, -1}, {1, 0}, {0, 1} }};
+constexpr int dir[3][2] = {{0, -1}, {1, 0}, {0, 1}};
+constexpr int MAXN = 10;
+constexpr int MAXM = 10;
 
-int n, m;
-vector<vector<int>> matrix;
-vector<vector<bool>> visited;
+int n, m, board[MAXN][MAXM], max_val = 0xcfcfcfcf;
+bool vis[MAXN][MAXM];
 
-void dfs(int row, int col, int &max_profit, int sum) {
-    if (row == n - 1 && col == m - 1) {
-        max_profit = max(max_profit, sum);
+void dfs(int r, int c, int sum) {
+    if (r == n - 1 && c == m - 1) {
+        max_val = max(max_val, sum);
+        return;
     }
-    for (int i = 0; i < 3; i++) {
-        int _row = row + dir[i][0];
-        int _col = col + dir[i][1];
-        if (_row >= 0 && _row < n && _col >= 0 && _col < m && !visited[_row][_col]) {
-            visited[_row][_col] = true;
-            dfs(_row, _col, max_profit, sum + matrix[_row][_col]);
-            visited[_row][_col] = false;
+    for (int i = 0; i < 3; ++i) {
+        int nr = r + dir[i][0], nc = c + dir[i][1];
+        if (nr < 0 || nr >= n || nc < 0 || nc >= m) 
+            continue;
+        if (!vis[nr][nc]) {
+            vis[nr][nc] = true;
+            dfs(nr, nc, sum + board[nr][nc]);
+            vis[nr][nc] = false;
         }
     }
 }
 
 int main() {
     cin >> n >> m;
-    matrix.resize(n, vector<int>(m));
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < m; j++) {
-            cin >> matrix[i][j];
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < m; ++j) {
+            cin >> board[i][j];
         }
     }
-    visited.resize(n, vector<bool>(m, false));
-    int max_profit = MIN;
-    visited[0][0] = true;
-    dfs(0, 0, max_profit, matrix[0][0]);
-    cout << max_profit << '\n';
+    vis[0][0] = true; // 标记起点
+    dfs(0, 0, board[0][0]);
+    cout << max_val << '\n';
     return 0;
 }

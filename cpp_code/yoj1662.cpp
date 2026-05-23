@@ -4,8 +4,7 @@ using namespace std;
 // 原个体域等价于D={0, 1}
 string formula;
 int pos = 0;
-array<bool, 2> is_uni = {false, false};
-array<bool, 2> vals;
+array<bool, 2> is_uni = {false, false}, vals;
 
 bool eval(char func, bool m, bool n = false) {
     switch (func) {

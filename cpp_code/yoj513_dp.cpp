@@ -13,7 +13,7 @@ ll solve() {
             for (int k = j - 1; k < i; ++k) {
                 int r = i - 1, l = k;
                 ll add = stoll(line.substr(l, r - l + 1));
-                dp[i][j] = max(dp[i][j], dp[k][j - 1] + add);
+                dp[i][j] = max(dp[i][j], dp[k][j-1] + add);
             }
         }
     }
@@ -24,10 +24,9 @@ ll solve() {
 }
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
+    cin.tie(nullptr)->sync_with_stdio(false);
     cin >> m >> line;
-    m += 1;
-    auto ans = solve();
+    ++m;
+    ll ans = solve();
     cout << ans << '\n';
 }

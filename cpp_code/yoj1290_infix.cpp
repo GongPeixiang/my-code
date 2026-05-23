@@ -4,8 +4,7 @@ using namespace std;
 int n;
 string expression;
 vector<bool> vals;
-unordered_map<char, int> idx_dict;
-unordered_map<char, int> order = { {'!', 4}, {'&', 3}, {'|', 2}, {'>', 1}, {'-', 1} };
+unordered_map<char, int> idx_dict, order = { {'!', 4}, {'&', 3}, {'|', 2}, {'>', 1}, {'-', 1} };
 
 bool calculate(char op, bool a, bool b = false) {
     switch(op) {
