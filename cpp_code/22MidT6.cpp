@@ -1,50 +1,56 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int n, m, max_val = 0;
-vector<vector<int>> board;
+constexpr int MAXN = 15;
 
-void new_pos(int &nr, int &nc, int r, int c, int new_dir) {
-    switch(new_dir) {
-        case 0: nr = r - 1; nc = c; return;
-        case 1: nr = r; nc = c + 1; return;
-        case 2: nr = r + 1; nc = c; return;
-        case 3: nr = r; nc = c - 1; return;
-    }
-}
+int n, m, grid[MAXN][MAXN], max_val = -1;
 
-int single(int r, int c) {
-    board[r][c] = (board[r][c] + 1) % 4;
-    int nr, nc, sum = 90;
-    new_pos(nr, nc, r, c, board[r][c]);
-    if (nr >= 0 && nr < n && nc >= 0 && nc < n) {
-        sum += single(nr, nc);
+int turn(int r, int c) {
+    grid[r][c] = (grid[r][c] + 1) % 4;
+    int sum = 90;
+    int nr, nc;
+    switch (grid[r][c]) {
+        case 0: 
+            nr = r - 1, nc = c; 
+            break;
+        case 1: 
+            nr = r, nc = c + 1; 
+            break;
+        case 2: 
+            nr = r + 1, nc = c; 
+            break;
+        case 3: 
+            nr = r, nc = c - 1; 
+            break;
     }
+    if (nr >= 0 && nr < n && nc >= 0 && nc < n) 
+        sum += turn(nr, nc);
     return sum;
 }
 
-void search(int cnt, int total_sum) {
-    if (cnt == m) {
-        max_val = max(total_sum, max_val);
+void dfs(int dep, int sum) {
+    if (dep == m) {
+        max_val = max(max_val, sum);
         return;
     }
-    for (int idx = 0; idx < n * n; idx++) {
-        vector<vector<int>> board_dup = board;
-        int r = idx / n, c = idx % n;
-        search(cnt + 1, total_sum + single(r, c));
-        board = board_dup;
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            int cpy[MAXN][MAXN];
+            memcpy(cpy, grid, sizeof(grid));
+            dfs(dep + 1, sum + turn(i, j));
+            memcpy(grid, cpy, sizeof(grid));
+        }
     }
 }
 
 int main() {
     cin >> n >> m;
-    board.resize(n, vector<int>(n));
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            cin >> board[i][j];
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            cin >> grid[i][j];
         }
     }
-    search(0, 0);
+    dfs(0, 0);
     cout << max_val << '\n';
     return 0;
 }

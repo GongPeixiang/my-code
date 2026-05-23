@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <string.h>
 
-#define MAXN 50
-#define MAXM 9
+#define MAXN 105
+#define MAXM 15
 
-int n, m, a[2 * MAXN], sum[2 * MAXN];
-int f[2 * MAXN][2 * MAXN][MAXM + 1], g[2 * MAXN][2 * MAXN][MAXM + 1];
+int n, m, a[MAXN], sum[MAXN];
+int f[MAXN][MAXN][MAXM], g[MAXN][MAXN][MAXM];
 int min_val = 0x3f3f3f3f, max_val = 0x8f8f8f8f;
 
 // 数据包含负数, 不过加一次10就行
@@ -17,7 +17,7 @@ static inline int min(int x, int y) { return x < y ? x : y; }
 
 void solve() 
 {
-    memset(f, 0x8f, sizeof(f));
+    memset(f, 0xcf, sizeof(f));
     memset(g, 0x3f, sizeof(g));
     for (int i = 0; i < 2 * n; ++i) {
         for (int j = i; j < 2 * n; ++j) {

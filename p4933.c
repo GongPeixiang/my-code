@@ -2,12 +2,12 @@
 
 typedef long long ll;
 
-#define MAXN 1000
-#define MAXH 20000
+#define MAXN 1005
+#define MAXH 20005
 #define MOD 998244353ll
 
 int n, max_h = - 1, h[MAXN];
-ll dp[MAXN + 5][2 * MAXH + 5];
+ll dp[MAXN][2 * MAXH];
 // +max_h的偏移量
 
 ll solve() 
