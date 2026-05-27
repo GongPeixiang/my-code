@@ -1,11 +1,16 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-using State = pair<int, int>;
 constexpr int MAXN = 2005;
 
 int n, src, dst, neighbor[MAXN][6];
-bool connect[MAXN][6], re_connect[MAXN][6][6];
+bool connect[MAXN][6], re_connect[MAXN][6][6], vis[MAXN][6];
+struct State {
+    int u, rot;
+    bool operator==(const State &other) const {
+        return u == other.u && rot == other.rot;
+    }
+} pre[MAXN][6];
 vector<State> path;
 
 // 预处理
@@ -20,38 +25,26 @@ void preprocess() {
     }
 }
 
-struct StatHash {
-    size_t operator()(const State &s) const {
-        size_t h1 = hash<int>{}(s.first);
-        size_t h2 = hash<int>{}(s.second);
-        return h1 ^ (h2 + 0x9e3779b9 + (h1 << 6) + (h1 >> 2));
-    }
-};
-
-struct HashEqual {
-    bool operator()(const State &a, const State &b) const {
-        return a.first == b.first && a.second == b.second;
-    }
-};
-
 // bfs
 void solve() {
+    memset(vis, 0, sizeof(vis));
+    memset(pre, 0xff, sizeof(pre));
     queue<State> q;  // 格子编号和旋转情况
-    unordered_map<State, State, StatHash, HashEqual> prev;
     for (int r = 0; r < 6; ++r) {
-        q.push(make_pair(src, r));
-        prev[make_pair(src, r)] = make_pair(-1, -1);
+        q.push({src, r});
+        vis[src][r] = true;
     }
     while (!q.empty()) {
         auto cur_stat = q.front();
-        int u = cur_stat.first, ru = cur_stat.second;
+        int u = cur_stat.u, ru = cur_stat.rot;
         q.pop();
         if (u == dst) {
-            State track = make_pair(u, ru);
-            while (track.first != -1) {
-                if (track.second != 0) 
-                    path.push_back(track);
-                track = prev[track];
+            State trk = {u, ru};
+            while (1) {
+                if (trk.u == -1) break;
+                if (trk.rot != 0)
+                    path.push_back(trk);
+                trk = pre[trk.u][trk.rot];
             }
             reverse(path.begin(), path.end());
             return;
@@ -63,9 +56,10 @@ void solve() {
             int vs = (us + 3) % 6;
             for (int rv = 0; rv < 6; ++rv) {
                 if (re_connect[v][rv][vs]) {
-                    if (!prev.count(make_pair(v, rv))) {
-                        prev[make_pair(v, rv)] = make_pair(u, ru);
-                        q.push(make_pair(v, rv));
+                    if (!vis[v][rv]) {
+                        vis[v][rv] = true;
+                        pre[v][rv] = {u, ru};
+                        q.push({v, rv});
                     }
                 }
             }
@@ -96,8 +90,8 @@ int main() {
     solve();
 
     cout << path.size() << '\n';
-    for (const auto &stat: path) {
-        int idx = stat.first + 1, rot = stat.second;
+    for (const auto &sta: path) {
+        int idx = sta.u + 1, rot = sta.rot;
         cout << idx << ' ' << 'R' << ' ' << rot << '\n';
     }
 }
