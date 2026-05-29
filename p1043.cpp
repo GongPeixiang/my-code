@@ -1,22 +1,17 @@
-#include <stdio.h>
-#include <string.h>
+#include <bits/stdc++.h>
+using namespace std;
 
-#define MAXN 105
-#define MAXM 15
+constexpr int MAXN = 105;
+constexpr int MAXM = 15;
 
 int n, m, a[MAXN], sum[MAXN];
 int f[MAXN][MAXN][MAXM], g[MAXN][MAXN][MAXM];
-int min_val = 0x3f3f3f3f, max_val = 0x8f8f8f8f;
+int min_val = 0x3f3f3f3f, max_val = 0xcfcfcfcf;
 
 // 数据包含负数, 不过加一次10就行
-static inline int mod(int x) { return (x % 10 + 10) % 10; }
+inline int mod(int x) { return (x % 10 + 10) % 10; }
 
-static inline int max(int x, int y) { return x > y ? x : y; }
-
-static inline int min(int x, int y) { return x < y ? x : y; }
-
-void solve() 
-{
+void solve() {
     memset(f, 0xcf, sizeof(f));
     memset(g, 0x3f, sizeof(g));
     for (int i = 0; i < 2 * n; ++i) {
@@ -46,17 +41,17 @@ void solve()
     }
 }
 
-int main() 
-{
-    scanf("%d %d", &n, &m);
+int main() {
+    cin.tie(nullptr)->sync_with_stdio(false);
+    cin >> n >> m;
     for (int i = 0; i < n; ++i) {
-        scanf("%d", &a[i]);
-        a[i + n] = a[i];
+        cin >> a[i];
+        a[i+n] = a[i];
     }
     sum[0] = a[0];
     for (int i = 1; i < 2 * n; ++i) 
         sum[i] = sum[i-1] + a[i];
     solve();
-    printf("%d\n%d", min_val, max_val);
+    cout << min_val << max_val << '\n';
     return 0;
 }
