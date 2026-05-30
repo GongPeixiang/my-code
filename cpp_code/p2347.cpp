@@ -1,9 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int max_w;
-array<int, 7> w = {{ -1, 1, 2, 3, 5, 10, 20 }}, cnt;
-vector<int> dp; // dp[i]代表能凑出重量i的方案数
+constexpr int MAXW = 1005;
+
+int max_w, w[7] = {-1, 1, 2, 3, 5, 10, 20}, cnt[7];
+int dp[MAXW]; // dp[i]代表能凑出重量i的方案数
 
 int main() {
     for (int i = 1; i <= 6; ++i) 
@@ -11,7 +12,6 @@ int main() {
     for (int i = 1; i <= 6; ++i) 
         max_w += cnt[i] * w[i];
 
-    dp.resize(max_w + 1, 0);
     dp[0] = 1;
     for (int i = 1; i <= 6; ++i) {
         for (int j = max_w; j >= w[i]; --j) {
@@ -21,9 +21,8 @@ int main() {
         }
     }
     int ans = 0;
-    for (int i = 1; i <= max_w; ++i) {
-        if (dp[i] != 0) 
-            ans++;
-    }
+    for (int i = 1; i <= max_w; ++i) 
+        if (dp[i] != 0) ++ans;
+    
     cout << "Total=" << ans << '\n';
 }

@@ -1,44 +1,32 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-struct Segment {
-    int _left, _right;
-};
-vector<Segment> segs;
+constexpr int MAXN = 20005;
+using ll = long long;
+
 int n, ans = 0;
+struct Segment {
+    ll l, r;
+} seg[MAXN];
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-
+    cin.tie(nullptr)->sync_with_stdio(false);
     cin >> n;
-    segs.resize(n);
-    for (int i = 0; i < n; i++) {
-        cin >> segs[i]._left >> segs[i]._right;
-    }
-
-    sort(segs.begin(), segs.end(), [](const Segment &a, const Segment &b) {
-        return a._left < b._left;
+    for (int i = 0; i < n; i++) 
+        cin >> seg[i].l >> seg[i].r;
+    sort(seg, seg + n, [](const Segment &a, const Segment &b) {
+        return a.l < b.l;
     });
-
-    ans += segs[0]._right - segs[0]._left;
-    int right_boundary = segs[0]._right; // 注意，一定是右边界，而不是segs[i - 1]._right
-    for (int i = 1; i < n; i++) {
-        if (segs[i]._left >= right_boundary) {
-            ans += segs[i]._right - segs[i]._left;
-            right_boundary = segs[i]._right;
+    int st = seg[0].l, id = 0;
+    ll res = 0;
+    while (id < n) {
+        st = (seg[id].l >= st) ? seg[id].l : st;
+        if (seg[id].r > st) {
+            res += seg[id].r - st;
+            st = seg[id].r;
         }
-        else {
-            if (segs[i]._right <= right_boundary) 
-                continue;
-            else {
-                ans += segs[i]._right - right_boundary;
-                right_boundary = segs[i]._right;
-            }
-        }
+        ++id;
     }
-
-    cout << ans << '\n';
-
+    cout << res << '\n';
     return 0;
 }

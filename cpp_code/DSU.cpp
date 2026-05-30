@@ -2,8 +2,7 @@
 #include <vector>
 using namespace std;
 
-class DSU {
-public:
+struct DSU {
     vector<int> parent, size; // 按大小合并树
     int cc_cnt; // cc for connection component
 

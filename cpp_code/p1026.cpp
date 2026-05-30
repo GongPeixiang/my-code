@@ -1,15 +1,14 @@
 #include <bits/stdc++.h>
-using std::string;
-using std::vector;
-using std::set;
+using namespace std;
 
-int p, k, s, max_sum = 0;
+constexpr int MAXN = 205, MAXK = 50;
+
+int P, K, s, dp[MAXN][MAXN], f[MAXN][MAXK];
 string str = "";
 set<string> dict;
 
-void preprocess(vector<vector<int>> &dp) {
+void preprocess() {
     int n = str.size();
-    dp.resize(n, vector<int>(n, 0));
     for (int i = 0; i < n; ++i) {
         if (dict.count(str.substr(i, 1))) 
             dp[i][i] = 1;
@@ -17,7 +16,7 @@ void preprocess(vector<vector<int>> &dp) {
     for (int len = 2; len <= n; ++len) {
         for (int i = 0; i + len - 1 < n; ++i) {
             int j = i + len - 1;
-            dp[i][j] = dp[i + 1][j];
+            dp[i][j] = dp[i+1][j];
             for (int l = i; l <= j; ++l) {
                 if (dict.count(str.substr(i, l - i + 1))) {
                     ++dp[i][j];
@@ -29,44 +28,33 @@ void preprocess(vector<vector<int>> &dp) {
 }
 
 int solve() {
-    int n = str.size();
-    vector<vector<int>> f, dp;
-    f.resize(n + 1, vector<int>(k + 1, 0));
-    preprocess(dp);
-    for (int i = 1; i <= n; ++i) {
-        for (int j = 1; j <= k; ++j) {
-            int _i = i - 1, _l;
+    int N = str.size();
+    for (int i = 1; i <= N; ++i) {
+        for (int j = 1; j <= K; ++j) {
             for (int l = j - 1; l < i; ++l) {
-                _l = l - 1;
-                f[i][j] = std::max(f[i][j], f[l][j - 1] + dp[_l + 1][_i]);
+                f[i][j] = max(f[i][j], f[l][j-1] + dp[l][i-1]);
             }
         }
     }
-    return f[n][k];
+    return f[N][K];
 }
 
 int main() {
-    std::ios::sync_with_stdio(false);
-    std::cin.tie(nullptr);
-    std::cin >> p >> k;
-    std::cin.ignore(2, '\n');
-    // std::cin.ignore(cnt, '\n'); 忽略最多cnt个字符,直到读到'\n'
+    cin.tie(nullptr)->sync_with_stdio(false);
+    cin >> P >> K;
     string tmp;
-    for (int i = 0; i < p; ++i) {
-        getline(std::cin, tmp);
-        // Linux格式下处理Windows文本的换行('\r''\n'),需手动移除'\r'!
-        if (!tmp.empty() && tmp.back() == '\r') 
-            tmp.pop_back();
+    for (int i = 0; i < P; ++i) {
+        cin >> tmp;
         str += tmp;
     }
-    std::cin >> s;
-    std::cin.ignore(2, '\n');
+    cin >> s;
     for (int i = 0; i < s; ++i) {
-        getline(std::cin, tmp);
-        if (!tmp.empty() && tmp.back() == '\r') 
-            tmp.pop_back();
+        cin >> tmp;
         dict.insert(tmp);
     }
+    memset(f, 0, sizeof(f));
+    memset(dp, 0, sizeof(dp));
+    preprocess();
     int ans = solve();
-    std::cout << ans << '\n';
+    cout << ans << '\n';
 }

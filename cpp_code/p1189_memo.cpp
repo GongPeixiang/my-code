@@ -1,73 +1,53 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int R, C, N;
-vector<vector<char>> road;
-vector<string> dirSeq;
+constexpr int MAXR = 55, MAXN = 1005;
+const int dir[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
-const array<array<int, 2>, 4> dir = {{ {-1, 0}, {1, 0}, {0, -1}, {0, 1} }};
-enum class direction : int {
-    NORTH = 0,
-    SOUTH,
-    WEST,
-    EAST
-};
+int R, C, n;
+char road[MAXR][MAXR];
+string dir_seq[MAXN];
+bool vis[MAXR][MAXR][MAXN];
 
-vector<vector<vector<bool>>> visited; // visited[r][c][depth] 是否已处理过这个状态
-
-void dfs(int r, int c, int depth) {
-    if (depth == N) {
+void dfs(int r, int c, int dep) {
+    if (dep == n) {
         road[r][c] = '*';
         return;
     }
-
     // 记忆化：如果已经处理过这个状态，直接返回
-    if (visited[r][c][depth]) 
-        return;
-    visited[r][c][depth] = true;
+    if (vis[r][c][dep]) return;
+    vis[r][c][dep] = true;
 
     int idx;
-    if (dirSeq[depth] == "NORTH") 
-        idx = static_cast<int> (direction::NORTH);
-    else if (dirSeq[depth] == "SOUTH") 
-        idx = static_cast<int> (direction::SOUTH);
-    else if (dirSeq[depth] == "WEST") 
-        idx = static_cast<int> (direction::WEST);
-    else if (dirSeq[depth] == "EAST") 
-        idx = static_cast<int> (direction::EAST);
+    if (dir_seq[dep] == "NORTH") idx = 0;
+    else if (dir_seq[dep] == "SOUTH") idx = 1;
+    else if (dir_seq[dep] == "WEST") idx = 2;
+    else if (dir_seq[dep] == "EAST") idx = 3;
 
     int nr = r + dir[idx][0], nc = c + dir[idx][1];
     for (; nr >= 0 && nr < R && nc >= 0 && nc < C; nr += dir[idx][0], nc += dir[idx][1]) {
-        if (road[nr][nc] == 'X') 
-            break;
-        dfs(nr, nc, depth + 1);
+        if (road[nr][nc] == 'X') break;
+        dfs(nr, nc, dep + 1);
     }
 }
 
 int main() {
-    int startR, startC;
-    cin >> R >> C;
-    road.resize(R, vector<char>(C));    
+    memset(vis, 0, sizeof(vis));
+    int sr, sc;
+    cin >> R >> C; 
     for (int i = 0; i < R; i++) {
         for (int j = 0; j < C; j++) {
             cin >> road[i][j];
             if (road[i][j] == '*') {
-                startR = i, startC = j;
+                sr = i, sc = j;
                 road[i][j] = '.';
             }
         }
     }
-    cin >> N;
-    dirSeq.resize(N);
-    for (int i = 0; i < N; i++) {
-        cin >> dirSeq[i];
-    }
-    
-    // 初始化记忆化数组
-    visited.resize(R, vector<vector<bool>>(C, vector<bool>(N + 1, false)));
-    
-    dfs(startR, startC, 0);
-    
+    cin >> n;
+    for (int i = 0; i < n; i++) 
+        cin >> dir_seq[i];
+    dfs(sr, sc, 0);
     for (int i = 0; i < R; i++) {
         for (int j = 0; j < C; j++) 
             cout << road[i][j];
