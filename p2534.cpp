@@ -1,14 +1,14 @@
 #include <bits/stdc++.h>
+using namespace std;
 
 constexpr int MAXN = 16;
 
 int N, a[MAXN], cpy[MAXN];
 
-int heuristic(void) 
-{
+int heuristic() {
     int cnt = 0;
     for (int i = 0; i < N - 1; ++i) {
-        if (std::abs(a[i] - a[i + 1]) != 1) 
+        if (abs(a[i] - a[i + 1]) != 1) 
             ++cnt;
     }
     if (a[N - 1] != N - 1) 
@@ -16,8 +16,7 @@ int heuristic(void)
     return cnt;
 }
 
-bool dfs(int dep, const int max_dep, int prev) // prev是上次反转的末位
-{
+bool dfs(int dep, const int max_dep, int prev) {// prev是上次反转的末位
     int h = heuristic();
     if (!h) 
         return true;
@@ -25,16 +24,15 @@ bool dfs(int dep, const int max_dep, int prev) // prev是上次反转的末位
         return false;
     for (int i = 1; i < N; ++i) {
         if (i == prev) continue;
-        std::reverse(a, a + i + 1);
+        reverse(a, a + i + 1);
         if (dfs(dep + 1, max_dep, i)) 
             return true;
-        std::reverse(a, a + i + 1);
+        reverse(a, a + i + 1);
     }
     return false;
 }
 
-int solve() 
-{
+int solve() {
     for (int max_dep = 0; ; ++max_dep) {
         if (dfs(0, max_dep, -1)) 
             return max_dep;
@@ -43,18 +41,19 @@ int solve()
 }
 
 int main() {
-    std::cin >> N;
+    cin.tie(nullptr)->sync_with_stdio(false);
+    cin >> N;
     for (int i = 0; i < N; ++i) {
-        std::cin >> a[i];
+        cin >> a[i];
         cpy[i] = a[i];
     }
-    std::sort(cpy, cpy + N);
+    sort(cpy, cpy + N);
     int tmp;
     for (int i = 0; i < N; ++i) {
         tmp = a[i];
-        a[i] = std::lower_bound(cpy, cpy + N, tmp) - cpy;
+        a[i] = lower_bound(cpy, cpy + N, tmp) - cpy;
     }
     int min_step = solve();
-    std::cout << min_step << '\n';
+    cout << min_step << '\n';
     return 0;
 }

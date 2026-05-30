@@ -1,27 +1,26 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int n, sum = 0;
-vector<int> frag_len;
-vector<bool> vis;
+constexpr int MAXN = 70;
 
-bool dfs(int done, int cur_len, int cur_pos, const int div,
-const int len) {
-    if (done == div) 
-        return true;
-    if (cur_len == len) 
+int n, sum = 0, frag[MAXN];
+bool vis[MAXN];
+
+bool dfs(int done, int curl, int pos, const int div, const int len) {
+    if (done == div) return true;
+    if (curl == len) 
         return dfs(done + 1, 0, 0, div, len);
     int skip = 0;
-    for (int i = cur_pos; i < n ; ++i) {
-        if (vis[i] || frag_len[i] == skip) 
+    for (int i = pos; i < n ; ++i) {
+        if (vis[i] || frag[i] == skip) 
             continue;
-        if (frag_len[i] + cur_len <= len) {
+        if (frag[i] + curl <= len) {
             vis[i] = true;
-            if (dfs(done, cur_len + frag_len[i], i + 1, div, len)) 
+            if (dfs(done, curl + frag[i], i + 1, div, len)) 
                 return true;
-            skip = frag_len[i];
+            skip = frag[i];
             vis[i] = false;
-            if (cur_len == 0 || cur_len + frag_len[i] == len) 
+            if (curl == 0 || curl + frag[i] == len) 
                 return false;
         }
     }
@@ -29,12 +28,11 @@ const int len) {
 }
 
 int solve() {
-    int start = max(sum / n , frag_len[0]);
+    int start = max(sum / n , frag[0]);
     for (int len = start; len <= sum / 2; ++len) {
-        if (sum % len != 0) 
-            continue;
+        if (sum % len != 0) continue;
         int div = sum / len;
-        vis.assign(n, false);
+        memset(vis, 0, sizeof(vis));
         if (dfs(0, 0, 0, div, len)) 
             return len;
     }
@@ -42,16 +40,13 @@ int solve() {
 }
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
+    cin.tie(nullptr)->sync_with_stdio(false);
     cin >> n;
-    frag_len.resize(n);
     for (int i = 0; i < n; ++i) {
-        cin >> frag_len[i];
-        sum += frag_len[i];
+        cin >> frag[i];
+        sum += frag[i];
     }
-    sort(frag_len.begin(), frag_len.end(), greater<int>());
-
+    sort(frag, frag + n, greater<int>());
     int ans = solve();
     cout << ans << '\n';
 }

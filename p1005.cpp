@@ -1,16 +1,16 @@
 #include <bits/stdc++.h>
-using std::string;
+using namespace std;
 
-constexpr int MAXN = 80;
-constexpr int MAXM = 80;
+constexpr int MAXN = 85;
+constexpr int MAXM = 85;
 
 int n, m;
-string dp[MAXM + 5][MAXM + 5], matrix[MAXN + 5][MAXM + 5];
-string pow2_tab[MAXM + 5];
+string dp[MAXM][MAXM], matrix[MAXN][MAXM];
+string pow2_tab[MAXM];
 
 string add(const string &a, const string &b) {
     int len = std::max(a.size(), b.size());
-    std::vector<int> res(len, 0);
+    vector<int> res(len, 0);
     int carry = 0;
     int k = len - 1, i = a.size() - 1, j = b.size() - 1;
     while (k >= 0) {
@@ -33,7 +33,7 @@ string multiply(const string &a, const string &b) {
         return "0";
     int la = a.size(), lb = b.size();
     int len = la + lb;
-    std::vector<int> res(len, 0);
+    vector<int> res(len, 0);
     for (int i = la - 1; i >= 0; --i) {
         int carry = 0;
         for (int j = lb - 1; j >= 0; --j) {
@@ -91,17 +91,16 @@ string solve() {
 }
 
 int main() {
-    std::ios::sync_with_stdio(false);
-    std::cin.tie(nullptr);
-    std::cin >> n >> m;
+    cin.tie(nullptr)->sync_with_stdio(false);
+    cin >> n >> m;
     int tmp;
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < m; ++j) {
-            std::cin >> tmp;
+            cin >> tmp;
             matrix[i][j] = std::to_string(tmp);
         }
     }
     string ans = solve();
-    std::cout << ans << '\n';
+    cout << ans << '\n';
     return 0;
 }
