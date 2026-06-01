@@ -1,13 +1,11 @@
 #include <stdio.h>
-#include <stdbool.h>
 
 #define MAXN 100000
 
 int L, N, pos[MAXN];
 int K, max_dis = -1;
 
-bool check(int dis) 
-{
+_Bool check(int dis) {
     int cnt = 0;
     int cur = 0, nxt = 1;
     while (nxt < N) {
@@ -19,8 +17,7 @@ bool check(int dis)
     return cnt <= K;
 }
 
-int main() 
-{
+int main() {
     scanf(" %d %d %d", &L, &N, &K);
     for (int i = 0; i < N; ++i) {
         scanf(" %d", &pos[i]);

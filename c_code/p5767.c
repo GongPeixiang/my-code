@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <string.h>
-#include <stdbool.h>
 #include <stdlib.h>
 
 #define MAXM 100
@@ -8,11 +7,10 @@
 
 int M, N, INF = 0x3f3f3f3f;
 int dist[MAXN];
-bool g[MAXN][MAXN], close[MAXN];
+_Bool g[MAXN][MAXN], close[MAXN];
 
 // n <= 500, 朴素dijkstra即可
-int solve() 
-{
+int solve() {
     memset(dist, 0x3f, sizeof(dist));
     memset(close, 0, sizeof(close));
     dist[0] = 0;
@@ -23,7 +21,7 @@ int solve()
                 m = j;
         }
         if (m == -1 || dist[m] == INF) break;
-        close[m] = true;
+        close[m] = 1;
         for (int j = 0; j < N; ++j) {
             if (!close[j] && g[m][j]) 
                 dist[j] = dist[m] + 1 < dist[j] ? dist[m] + 1 : dist[j];
@@ -34,8 +32,7 @@ int solve()
 }
 
 // IO不好写
-int main() 
-{
+int main() {
     memset(g, 0, sizeof(g));
     scanf("%d %d", &M, &N);
 

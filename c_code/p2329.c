@@ -9,8 +9,7 @@
 int m, n;
 int timber[MAXM], need[MAXN], cpy[MAXM];
 
-bool dfs(int done, int cur, const int t)
-{
+bool dfs(int done, int cur, const int t) {
     if (done == t) 
         return true;
     if (done + n - cur < t) 
@@ -28,8 +27,7 @@ bool dfs(int done, int cur, const int t)
     return false;
 }
 
-int solve() 
-{
+int solve() {
     memcpy(cpy, timber, sizeof(timber));
     int l = 0, r = n;
     while (l <= r) {
@@ -45,8 +43,7 @@ int solve()
 
 int cmp(const void *a, const void *b) { return *(int *)b - *(int *)a; }
 
-int main() 
-{
+int main() {
     scanf("%d", &m);
     for (int i = 0; i < m; ++i) 
         scanf("%d", &timber[i]);
