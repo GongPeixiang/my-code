@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-constexpr int dir[4][2] = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
+constexpr int dx[4] = {-1, 0, 1, 0}, dy[4] = {0, -1, 0, 1};
 constexpr int MAXN = 105;
 
 int n;
@@ -22,7 +22,7 @@ int bfs(int sr, int sc, int dr, int dc) {
             pair<int, int> cur = q.front();
             q.pop();
             for (int i = 0; i < 4; ++i) {
-                int nr = cur.first + dir[i][0], nc = cur.second + dir[i][1];
+                int nr = cur.first + dx[i], nc = cur.second + dy[i];
                 if (nr == dr && nc == dc)
                     return steps;
                 if (nr >= 0 && nr < n && nc >= 0 && nc < n && !vis[nr][nc]) {
