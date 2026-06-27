@@ -5,7 +5,7 @@ int N, K;
 string line;
 vector<vector<string>> dp;
 
-string multiply(const string &a, const string &b) {
+string multiply(const string& a, const string& b) {
     if (a == "0" || b == "0")
         return "0";
     int len1 = a.size(), len2 = b.size();
@@ -31,7 +31,7 @@ string multiply(const string &a, const string &b) {
     return result;
 }
 
-string get_max(const string &a, const string &b) {
+string get_max(const string& a, const string& b) {
     if (a.size() > b.size()) 
         return a;
     else if (a.size() < b.size()) 

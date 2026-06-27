@@ -1,49 +1,38 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+using ll = long long;
+constexpr int MAXN = 105;
+
+int n, m, k;
 struct Student {
-    long long num;
-    vector<int> score;
-};
+    ll num;
+    vector<int> s;
+} stu[MAXN];
 
 int main() {
-    int n = 0, m = 0, k = 0;
     cin >> n >> m >> k;
-    vector <Student> students(n);
     for (int i = 0; i < n; i++) {
-        cin >> students[i].num;
-        students[i].score.resize(m);
-        for (int j = 0; j < m; j++) {
-            cin >> students[i].score[j];
-        }
+        cin >> stu[i].num;
+        stu[i].s.resize(m);
+        for (int j = 0; j < m; j++) cin >> stu[i].s[j];
     }
-
-    float ave = 0, sum = 0;
-    for (int i = 0; i < n; i++) {
-        sum += students[i].score[k-1];
-    }
-    ave = sum / n;
-
-    sort(students.begin(), students.end(), [k](const Student &a, const Student &b) {
-        if (a.score[k-1] != b.score[k-1]) 
-            return a.score[k-1] > b.score[k-1];
+    float sum = 0;
+    for (int i = 0; i < n; i++) sum += stu[i].s[k-1];
+    float ave = sum / n;
+    sort(stu, stu + n, [](const Student& a, const Student& b) {
+        if (a.s[k-1] != b.s[k-1]) return a.s[k-1] > b.s[k-1];
         return a.num < b.num;
     });
-
-    int c = (n + 1) / 2;
-    int midscore = students[c-1].score[k-1];
-
-    printf("%.1f %d\n",ave,midscore);
-
+    int c = (n + 1) / 2, mid = stu[c-1].s[k-1];
+    cout << fixed << setprecision(1) << ave << mid;
+    cout << defaultfloat;
+    cout.unsetf(ios_base::floatfield);
     for (int i = 0; i < n; i++) {
-        if (students[i].score[k-1] == midscore) {
-            cout << students[i].num << " ";
-            for (int j = 0; j < m; j++) {
-                cout << students[i].score[j] << " ";
-            }
-            cout << endl;
+        if (stu[i].s[k-1] == mid) {
+            cout << stu[i].num << ' ';
+            for (int j = 0; j < m; j++) cout << stu[i].s[j] << " \n"[j == m-1];
         }
     }
-
     return 0;
 }

@@ -11,7 +11,7 @@ vector<int> path;
 struct Node {
     ll code; int op;
     int g, f;
-    bool operator<(const Node &other) const {
+    bool operator<(const Node& other) const {
         return f > other.f;
     }
 } pre[MAXCODE+5];

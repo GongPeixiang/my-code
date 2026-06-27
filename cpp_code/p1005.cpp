@@ -8,7 +8,7 @@ int n, m;
 string dp[MAXM][MAXM], matrix[MAXN][MAXM];
 string pow2_tab[MAXM];
 
-string add(const string &a, const string &b) {
+string add(const string& a, const string& b) {
     int len = std::max(a.size(), b.size());
     vector<int> res(len, 0);
     int carry = 0;
@@ -28,7 +28,7 @@ string add(const string &a, const string &b) {
     return ans;
 }
 
-string multiply(const string &a, const string &b) {
+string multiply(const string& a, const string& b) {
     if (a == "0" || b == "0") 
         return "0";
     int la = a.size(), lb = b.size();
@@ -52,7 +52,7 @@ string multiply(const string &a, const string &b) {
     return ans;
 }
 
-string get_max(string &a, string &b) {
+string get_max(string& a, string& b) {
     if (a.size() != b.size()) 
         return a.size() > b.size() ? a : b;
     return a > b ? a : b;

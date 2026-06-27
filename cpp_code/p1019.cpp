@@ -7,7 +7,7 @@ int n, maxlen = 0xcfcfcfcf;
 string dict[MAXN];
 bool vis[MAXN];
 
-int check(const string &str, const string &a) {
+int check(const string& str, const string& a) {
     int len = str.size() > a.size()? a.size(): str.size();
     for (int i = 1; i < len; ++i) {
         if (str.substr(str.size() - i, i) == a.substr(0, i)) 
@@ -16,7 +16,7 @@ int check(const string &str, const string &a) {
     return -1;
 }
 
-void dfs(string &str) {
+void dfs(string& str) {
     int len = str.size();
     if (len > maxlen) maxlen = len;
     for (int i = 0; i < 2 * n; ++i) {

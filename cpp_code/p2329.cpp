@@ -1,46 +1,44 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int m, n;
-vector<int> timber, need_len;
-int max_done = 0;
-vector<bool> vis;
+constexpr int MAXM = 55, MAXN = 1005;
 
-void dfs(int done) {
-    int cur_timber = timber[0];
-    vector<int> tmp = timber;
-    for (int i = 0; i < n; ++i) {
-        if (!vis[i] && need_len[i] <= cur_timber) {
-            int remain = cur_timber - need_len[i];
-            vis[i] = true;
-            timber.erase(timber.begin());
-            timber.push_back(remain);
-            sort(timber.begin(), timber.end(), greater<int>());
-            dfs(done + 1);
-            timber = tmp;
-            vis[i] = false;
+int m, n, timber[MAXM], need[MAXN], cpy[MAXN];
+
+bool dfs(const int div, int done, int cur) {
+    if (done == div) return true;
+    if (n - cur + done < div) return false;
+    for (int i = 0; i < m; ++i) {
+        if (timber[i] >= need[cur]) {
+            timber[i] -= need[cur];
+            if (dfs(div, done + 1, cur + 1)) 
+                return true;
+            timber[i] += need[cur];
         }
     }
-    max_done = max(max_done, done);
+    return dfs(div, done, cur + 1);
 }
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
+    cin.tie(nullptr)->sync_with_stdio(false);
     cin >> m;
-    timber.resize(m);
-    for (int i = 0; i < m; ++i) 
-        cin >> timber[i];
+    for (int i = 0; i < m; ++i) cin >> timber[i];
     cin >> n;
-    need_len.resize(n);
-    vis.resize(n, false);
-    for (int i = 0; i < n; ++i) 
-        cin >> need_len[i];
-
-    sort(timber.begin(), timber.end(), greater<int>());
-    sort(need_len.begin(), need_len.end(), greater<int>());
-
-    dfs(0);
-
-    cout << max_done << '\n';
+    for (int i = 0; i < n; ++i) cin >> need[i];
+    sort(need, need + n); sort(timber, timber + m);
+    memcpy(cpy, timber, sizeof(timber));
+    // 把问题转化成给定个数下的可行性验证
+    // 利用二分, 极大地减少搜索个数
+    int ans = 0;
+    int l = 0, r = n;
+    while (l <= r) {
+        int mid = (l + r) / 2;
+        memcpy(timber, cpy, sizeof(timber));
+        if (dfs(mid, 0, 0)) {
+            ans = mid;
+            l = mid + 1;
+        }
+        else r = mid - 1;
+    }
+    cout << ans << '\n';
 }

@@ -39,7 +39,7 @@ void preprocess() {
         int ye = lower_bound(yh, yh + my + 1, box[ii].y0 + box[ii].y) - yh;
         int zs = lower_bound(zh, zh + mz + 1, box[ii].z0) - zh;
         int ze = lower_bound(zh, zh + mz + 1, box[ii].z0 + box[ii].z) - zh;
-        // 修正:确保结束索引不超过格子数
+        // 修正:确保结束索引不超过点数
         if (xe > mx) xe = mx;
         if (ye > my) ye = my;
         if (ze > mz) ze = mz;
@@ -51,7 +51,7 @@ void preprocess() {
     v = (xh[mx] - xh[0]) * (yh[my] - yh[0]) * (zh[mz] - zh[0]);
 }
 
-// 块的索引和格子的索引
+// 格子的索引和点的索引
 void bfs(int x, int y, int z) {
     ll sa = 0, va = 0;
     queue<Cell> q;

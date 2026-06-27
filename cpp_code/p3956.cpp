@@ -14,14 +14,14 @@ struct Node {
     Node(int r, int c, int pc, bool m, int g): r(r), c(c), cl(pc), 
     mag(m), g(g) {}
     struct Cmp {
-        bool operator()(const Node *a, const Node *b) const {
+        bool operator()(const Node* a, const Node* b) const {
             return a->g > b->g;
         }
     };
 };
 
 int solve() {
-    priority_queue<Node *, vector<Node *>, Node::Cmp> pq;
+    priority_queue<Node*, vector<Node*>, Node::Cmp> pq;
     vector<unique_ptr<Node>> all_nodes;
     
     auto init_node = make_unique<Node>(0, 0, board[0][0], false, 0);

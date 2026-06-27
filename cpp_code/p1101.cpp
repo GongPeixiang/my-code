@@ -1,57 +1,50 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const array<array<int, 2>, 8> dir = {{ {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}, {1, 0}, {1, 1}, {0, 1} }};
+constexpr int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0}, dy[8] = {1, 0, -1, -1, -1, 0, 1, 1};
+constexpr int MAXN = 105;
 const string word = "yizhong";
 
 int n;
-vector<vector<char>> matrix;
+char mat[MAXN][MAXN];
+bool inword[MAXN][MAXN];
 
-void dfs(int row, int col, const int &d, int word_ptr, vector<vector<bool>> &inword) {
-    if (word_ptr == 6) {
-        int r = row, c = col;
-        for (int i = 0; i <= 6; i++) {
-            inword[r][c] = true;
-            r -=  dir[d][0];
-            c -=  dir[d][1];
+void dfs(int r, int c, const int d, int tp) {
+    if (tp == 6) {
+        int R = r, C = c;
+        for (int i = 0; i < word.size(); i++) {
+            inword[R][C] = true;
+            R -=  dx[d];
+            C -=  dy[d];
         }
         return;
     }
-    int _row = row + dir[d][0];
-    int _col = col + dir[d][1];
-    if (!(_row >= 0 && _row < n && _col >= 0 && _col < n)) return;
-    if (matrix[_row][_col] == word[word_ptr + 1]) {
-        dfs(_row, _col, d, word_ptr + 1, inword);
-    }
+    int nr = r + dx[d], nc = c + dy[d];
+    if (nr < 0 && nr >= n && nc < 0 && nc >= n) return;
+    if (mat[nr][nc] == word[tp+1]) 
+        dfs(nr, nc, d, tp + 1);
 }
 
 int main() {
+    memset(inword, 0, sizeof(inword));
     cin >> n;
-    matrix.resize(n, vector<char>(n));
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            cin >> matrix[i][j];
-        }
-    }
-
-    vector<vector<bool>> inword(n, vector<bool>(n, false));
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            if (matrix[i][j] == 'y') {
-                for (int d = 0; d < 8; d++) {
-                    dfs(i, j, d, 0, inword);
-                }
+    for (int i = 0; i < n; i++) 
+        for (int j = 0; j < n; j++) 
+            cin >> mat[i][j];
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            if (mat[i][j] == 'y') {
+                for (int d = 0; d < 8; ++d) 
+                    dfs(i, j, d, 0);
             }
         }
     }
-
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            if (inword[i][j]) cout << matrix[i][j];
+            if (inword[i][j]) cout << mat[i][j];
             else cout << '*';
         }
         cout << '\n';
     }
-
     return 0;
 }

@@ -1,8 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-constexpr int dx[8] = {-2, -2, -1, -1, 1, 1, 2, 2};
-constexpr int dy[8] = {-1, 1, 2, -2, 2, -2, -1, 1};
+constexpr int dx[8] = {-2, -2, -1, -1, 1, 1, 2, 2}, dy[8] = {-1, 1, 2, -2, 2, -2, -1, 1};
 constexpr char tgt[5][5] = {
     {'1','1','1','1','1'},
     {'0','1','1','1','1'},
