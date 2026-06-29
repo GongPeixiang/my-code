@@ -2,59 +2,43 @@
 using namespace std;
 
 constexpr int MAXM = 105;
-constexpr int dx[4] = {-1, 0, 0, 1};
-constexpr int dy[4] = {0, -1, 1, 0};
+constexpr int dx[4] = {-1, 0, 0, 1}, dy[4] = {0, -1, 1, 0};
 
-int m, board[MAXM][MAXM], best_g[MAXM][MAXM][2][2];
-
+int m, maze[MAXM][MAXM], dist[MAXM][MAXM][2][3];
 struct Node {
-    int r, c;
-    int cl; bool mag;
+    int x, y, c; bool mag;
     int g;
-    Node(int r, int c, int pc, bool m, int g): r(r), c(c), cl(pc), 
-    mag(m), g(g) {}
-    struct Cmp {
-        bool operator()(const Node* a, const Node* b) const {
-            return a->g > b->g;
-        }
-    };
+    bool operator<(const Node& other) const { return g > other.g; }
 };
 
 int solve() {
-    priority_queue<Node*, vector<Node*>, Node::Cmp> pq;
-    vector<unique_ptr<Node>> all_nodes;
-    
-    auto init_node = make_unique<Node>(0, 0, board[0][0], false, 0);
-    pq.push(init_node.get());
-    all_nodes.push_back(move(init_node));
-
+    memset(dist, 0x3f, sizeof(dist));
+    dist[1][1][0][maze[1][1]] = 0;
+    priority_queue<Node, vector<Node>> pq;
+    pq.push(Node{1, 1, maze[1][1], false, 0});
     while (!pq.empty()) {
-        auto cur = pq.top();
-        pq.pop();
-        int r = cur->r, c = cur->c, cl = cur->cl, mag = cur->mag;
-        int curg = cur->g;
-        if (curg > best_g[r][c][cl][mag]) continue;
-        if (r == m - 1 && c == m - 1) 
-            return curg;
+        Node cur = pq.top(); pq.pop();
+        int x = cur.x, y = cur.y, c = cur.c;
+        bool mag = cur.mag;  int g = cur.g;
+        if (x == m && y == m) 
+            return g;
+        if (g > dist[x][y][mag==true][c]) continue;
         for (int i = 0; i < 4; ++i) {
-            int nr = r + dx[i], nc = c + dy[i];
-            if (nr < 0 || nr >= m || nc < 0 || nc >= m) continue;
-            int ng = 0, ncl = -1;
-            bool nmag = false;
-            if (board[nr][nc] != -1) {
-                ng = curg + (board[nr][nc] == cl ? 0 : 1);
-                ncl = board[nr][nc]; 
+            int nx = x + dx[i], ny = y + dy[i];
+            if (nx < 1 || nx > m || ny < 1 || ny > m) continue;
+            int ng, nc = maze[nx][ny]; bool nmag = false;
+            if (mag) {
+                if (maze[nx][ny] == -1) continue;
+                ng = g + (maze[nx][ny] == c ? 0 : 1);
             } else {
-                if (mag) continue;
-                ng = curg + 2;
-                ncl = cl;
-                nmag = true;
+                if (maze[nx][ny] == -1) { 
+                    nmag = true; 
+                    nc = c; ng = g + 2;
+                } else ng = g + (maze[nx][ny] == c ? 0 : 1);
             }
-            if (ng < best_g[nr][nc][ncl][nmag]) {
-                auto new_node = make_unique<Node>(nr, nc, ncl, nmag, ng);
-                best_g[nr][nc][ncl][nmag] = ng;
-                pq.push(new_node.get());
-                all_nodes.push_back(move(new_node));
+            if (ng < dist[nx][ny][nmag==true][nc]) {
+                dist[nx][ny][nmag==true][nc] = ng;
+                pq.push(Node{nx, ny, nc, nmag, ng});
             }
         }
     }
@@ -63,14 +47,12 @@ int solve() {
 
 int main() {
     cin.tie(nullptr)->sync_with_stdio(false);
-    memset(board, 0xff, sizeof(board));
-    memset(best_g, 0x3f, sizeof(best_g));
-    int n, r, c, t;
+    memset(maze, 0xff, sizeof(maze));
+    int n, x, y, c;
     cin >> m >> n;
     while (n--) {
-        cin >> r >> c >> t;
-        --r, --c;
-        board[r][c] = t;
+        cin >> x >> y >> c;
+        maze[x][y] = c;
     }
     int ans = solve();
     cout << ans << '\n';
