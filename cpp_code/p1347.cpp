@@ -3,8 +3,7 @@ using namespace std;
 
 int n, m;
 vector<vector<int>> graph;
-vector<int> in;
-vector<int> seq;
+vector<int> in, seq;
 vector<bool> exist;
 int mark = 1e5;
 

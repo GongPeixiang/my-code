@@ -7,15 +7,10 @@ struct DSU {
     int cc_cnt; // cc for connection component
 
     DSU(int n): cc_cnt(n), parent(n), size(n, 1) {
-        for (int i = 0; i < n; i++) 
-            parent[i] = i;
+        for (int i = 0; i < n; i++) parent[i] = i;
     }
 
-    int find(int x) { // 递归路径压缩更彻底 
-        if (x != parent[x]) 
-            parent[x] = find(parent[x]);
-        return parent[x];
-    }
+    int find(int x) { return x == parent[x] ? x : parent[x] = find(parent[x]); }
 
     bool unite(int a, int b) {
         int root_a = find(a), root_b = find(b);
