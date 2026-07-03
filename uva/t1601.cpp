@@ -1,30 +1,24 @@
-/* morning after halloween */
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
+#include <bits/stdc++.h>
+using namespace std;
 
-#define MAXN 150
-#define MAXQ 20000
-const int dx[5] = {0, -1, 0, 1, 0}, dy[5] = {0, 0, 1, 0, -1};
+constexpr int MAXW = 20, MAXN = 150;
+constexpr int dx[5] = {0, -1, 0, 1, 0}, dy[5] = {0, 0, 1, 0, -1};
 // the direction array is only used in preprocess
 
-int deg[MAXN], g[MAXN][5], src[3], dst[3];
-int dist[MAXN][MAXN][MAXN];
-struct Node {
-    int a, b, c;
-} q[MAXQ];
+int deg[MAXN], g[MAXN][5], src[3], dst[3], dist[MAXN][MAXN][MAXN];
+struct Node { int a, b, c; };
 
-static inline int illegal(int x, int y, int nx, int ny) 
-{ return !((nx == ny)||(x == ny && y == nx)); }
+inline bool illegal(int x, int y, int nx, int ny) { 
+    return (nx == ny)||(x == ny && y == nx); 
+}
 
-int solve() 
-{
+int solve() {
     memset(dist, 0xff, sizeof(dist));
-    int head = 0, tail = 0;
-    q[tail++] = (struct Node){src[0], src[1], src[2]};
+    queue<Node> q;
+    q.push(Node{src[0], src[1], src[2]});
     dist[src[0]][src[1]][src[2]] = 0;
-    while (head != tail) {
-        struct Node cur = q[head++];
+    while (!q.empty()) {
+        Node cur = q.front(); q.pop();
         int a = cur.a, b = cur.b, c = cur.c;
         if (a == dst[0] && b == dst[1] && c == dst[2]) 
             return dist[a][b][c];
@@ -38,7 +32,7 @@ int solve()
                     if (illegal(a, c, na, nc) || illegal(b, c, nb, nc)) continue;
                     if (~dist[na][nb][nc]) continue;
                     dist[na][nb][nc] = dist[a][b][c] + 1;
-                    q[tail++] = (struct Node){na, nb, nc};
+                    q.push(Node{na, nb, nc});
                 }
             }
         }
@@ -46,19 +40,19 @@ int solve()
     return -1;
 }
 
-int main() 
-{
-    char maze[20][20];
+int main() {
+    cin.tie(nullptr)->sync_with_stdio(false);
+    char maze[MAXW][MAXW];
     int w, h, sum;
-    int cnt = 0, x[MAXN], y[MAXN], id[20][20], ch;
-    while (scanf("%d%d%d", &w, &h, &sum)==3) {
+    int cnt = 0, x[MAXN], y[MAXN], id[MAXW][MAXW];
+    while (cin >> w >> h >> sum) {
         if (!w && !h && !sum) break;
         cnt = 0;
         memset(deg, 0, sizeof(deg));
         for (int i = 0; i < h; ++i) {
-            scanf(" ");
+            cin.ignore(1000, '\n');
             for (int j = 0; j < w; ++j) {
-                maze[i][j] = getchar();
+                maze[i][j] = cin.get();
                 if (maze[i][j] != '#') {
                     x[cnt] = i, y[cnt] = j;
                     id[i][j] = cnt;
@@ -69,16 +63,15 @@ int main()
             }
         }
         for (int i = 0; i < cnt; ++i) {
-            for (int j = 0; j < 5; ++j) {
-                int xx = x[i] + dx[i], yy = y[i] + dy[i];
-                if (xx < 0 || xx >= w || yy < 0 || yy >= h) continue;
+            for (int k = 0; k < 5; ++k) {
+                int xx = x[i] + dx[k], yy = y[i] + dy[k];
+                if (xx < 0 || xx >= h || yy < 0 || yy >= w) continue;
                 if (maze[xx][yy] != '#') g[i][deg[i]++] = id[xx][yy];
             }
         }
         if (sum <= 2) { src[2] = dst[2] = g[cnt][0] = cnt; deg[cnt++] = 1; }
         if (sum <= 1) { src[1] = dst[1] = g[cnt][0] = cnt; deg[cnt++] = 1; }
-        int ans = solve();
-        printf("%d\n", ans);
+        cout << solve() << '\n';
     }
     return 0;
 }
