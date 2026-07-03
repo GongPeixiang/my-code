@@ -7,15 +7,15 @@ int n;
 char img[N][N];
 vector<int> seq, path;
 
-bool is2color(int r, int c, int len) {
+bool pure(int r, int c, int len) {
 	for (int i = r; i < r + len; ++i) 
 		for (int j = c; j < c + len; ++j) 
-			if (img[i][j] != img[r][c]) return true;
-	return false;
+			if (img[i][j] != img[r][c]) return false;
+	return true;
 }
 
 void img2seq(int r, int c, int len) {
-	if (!is2color(r, c, len)) {
+	if (pure(r, c, len)) {
 		if (img[r][c] == '0') return;
 		int num = 0;
 		for (int i = path.size() - 1; i >= 0; --i) 
