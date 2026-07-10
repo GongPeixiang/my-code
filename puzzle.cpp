@@ -77,10 +77,10 @@ void clr_screen() {
 
 void print_border(const string& title) {
     cout << CYAN << "╔";
-    for(int i = 0; i < 58; ++i) cout << "═";
+    for(int i = 0; i < 50; ++i) cout << "═";
     cout << "╗\n";
-    cout << "║" << BOLD << WHITE << right << setw(56) << title << RESET << CYAN << "║\n╠";
-    for(int i = 0; i < 58; ++i) cout << "═";
+    cout << "║" << BOLD << GREEN << left << setw(45) << title << RESET << CYAN << "║\n╠";
+    for(int i = 0; i < 50; ++i) cout << "═";
     cout << "╣\n" << RESET;
 }
 
@@ -204,13 +204,13 @@ void game() {
     cout << UNDERLINE << "路径演示:\n\n" << RESET;
     SLEEP_MS(1000);
     for (size_t i = 0; i < path.size(); ++i) {
-        cout << CYAN << "╔════════════════════════════════════════════════════════════════╗\n";
+        cout << CYAN << "╔══════════════════════════════════════════════════════════╗\n";
         cout << "║  " << BOLD << "第 " << setw(3) << (i + 1) << " 步" << RESET << CYAN << "                              ║\n";
-        cout << "╚════════════════════════════════════════════════════════════════╝\n" << RESET;
+        cout << "╚══════════════════════════════════════════════════════════╝\n" << RESET;
         decode(board, path[i]);
         print_board(board);
-        cout << "──────────────────────────────────────────────────────────────────\n";
-        SLEEP_MS(500);
+        cout << "────────────────────────────────────────────────────────────\n";
+        SLEEP_MS(1000);
     }
     cout << '\n';
     cout << BLINK;
