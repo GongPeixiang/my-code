@@ -17,33 +17,42 @@ constexpr char RED[10] = "\033[31m", GREEN[10] = "\033[32m", YELLOW[10] = "\033[
 constexpr char MAGENTA[10] = "\033[35m", CYAN[10] = "\033[36m", WHITE[10] = "\033[37m";
 
 constexpr int dx[4] = {-1, 0, 1, 0}, dy[4] = {0, -1, 0, 1};
+constexpr int fact[9] = {1,1,2,6,24,120,720,5040,40320}; 
+constexpr int MAXS = 362880;
 
 struct Node {
     int code;
     int g, f;
-    Node *prev;
-    Node(int c, int gv, int fv, Node* p):code(c), g(gv), f(fv), prev(p) {}
-    struct Cmp {
-        bool operator()(const Node* a, const Node* b) const{return a->f > b->f;}
-    };
-};
+    bool operator<(const Node& other) const { return f > other.f; }
+} pre[MAXS];
+int best_g[MAXS];
 
-int encode(int board[3][3]) {
-    int code = 0;
-    for (int i = 0; i < 3; ++i) 
-        for (int j = 0; j < 3; ++j) 
-            code = code * 9 + board[i][j];
+int encode(int board[3][3]) { // cantor
+    int code = 0, cnt = 0;
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            int rk = 0;
+            for (int r = i; r < 3; ++r) {
+                for (int c = (r==i ? j+1:0); c < 3; ++c) 
+                    if (board[r][c] < board[i][j]) ++rk;
+            }
+            code += rk * fact[8-cnt];
+            ++cnt;
+        }
+    }
     return code;
 }
 
 pair<int, int> decode(int board[3][3], int code) {
+    vector<int> nums;
+    for (int i = 0; i < 9; ++i) nums.push_back(i);
     int zr, zc;
-    for (int i = 2; i >= 0; --i) {
-        for (int j = 2; j >= 0; --j) {
-            board[i][j] = code % 9;
-            if (!board[i][j]) { zr = i; zc = j; }
-            code /= 9;
-        }
+    for (int i = 0; i < 9; ++i) {
+        int rk = code / fact[8 - i], val = nums[rk];
+        code %= fact[8 - i];
+        board[i/3][i%3] = val;
+        if (val == 0) { zr = i / 3; zc = i % 3; }
+        nums.erase(nums.begin() + rk);
     }
     return make_pair(zr, zc);
 }
@@ -157,27 +166,24 @@ void game() {
     cout << GREEN << "\n√ 输入成功！正在计算最优解...\n" << RESET;
     SLEEP_MS(500);
 
-    vector<unique_ptr<Node>> all_nodes;
-    priority_queue<Node*, vector<Node*>, Node::Cmp> pq;
-    unordered_map<int, int> best_g;
+    priority_queue<Node, vector<Node>> pq;
+    memset(best_g, 0xff, sizeof(best_g));
     vector<int> path;
 
     int init_code = encode(board), init_h = h(board);
-    unique_ptr<Node> init = make_unique<Node>(init_code, 0, init_h, nullptr);
-    pq.push(init.get());
-    best_g[init_code] = 0;
-    all_nodes.push_back(move(init));
+    pq.push(Node{init_code, 0, init_h});
+    best_g[init_code] = 0; pre[init_code] = Node{-1, -1, -1};
 
     while (!pq.empty()) {
-        Node* cur = pq.top(); pq.pop();
-        if (best_g[cur->code] < cur->g) continue;
-        pair<int, int> zpos = decode(board, cur->code);
+        Node cur = pq.top(); pq.pop();
+        if (best_g[cur.code] < cur.g) continue;
+        pair<int, int> zpos = decode(board, cur.code);
         int zr = zpos.first, zc = zpos.second;
         if (judge(board)) {
-            Node* trk = cur;
-            while (trk != all_nodes[0].get()) {
-                path.push_back(trk->code);
-                trk = trk->prev; 
+            Node trk = cur;
+            while (trk.code != init_code) {
+                path.push_back(trk.code);
+                trk = pre[trk.code]; 
             }
             reverse(path.begin(), path.end());
             break;
@@ -186,12 +192,11 @@ void game() {
             int nr = zr + dx[i], nc = zc + dy[i];
             if (nr < 0 || nr >= 3 || nc < 0 || nc >= 3) continue;
             swap(board[zr][zc], board[nr][nc]);
-            int ncode = encode(board), ng = cur->g + 1, nh = h(board);
-            if (!best_g.count(ncode) || ng < best_g[ncode]) {
+            int ncode = encode(board), ng = cur.g + 1, nh = h(board);
+            if (best_g[ncode] == -1 || ng < best_g[ncode]) {
                 best_g[ncode] = ng;
-                auto new_node = make_unique<Node>(ncode, ng, ng + nh, cur);
-                pq.push(new_node.get());
-                all_nodes.push_back(move(new_node));
+                pre[ncode] = cur;
+                pq.push(Node{ncode, ng, ng + nh});
             }
             swap(board[zr][zc], board[nr][nc]);
         }
