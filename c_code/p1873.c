@@ -17,16 +17,13 @@ int main()
     while (l <= r) {
         int mid = l + (r - l) / 2;
         ll get = 0;
-        for (int i = 0; i < n; ++i) {
-            if (h[i] > mid) 
-                get += h[i] - mid;
-        }
+        for (int i = 0; i < n; ++i) 
+            if (h[i] > mid) get += h[i] - mid;
         if (get >= m) {
             ans = mid;
             l = mid + 1;
         }
-        else 
-            r = mid - 1; 
+        else r = mid - 1; 
     }
     printf("%d\n", ans);
     return 0;

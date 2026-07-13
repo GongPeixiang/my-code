@@ -19,7 +19,6 @@ void add_edge(int u, int v)
 }
 
 static inline int max(int x, int y) { return x > y ? x : y; }
-
 static inline int min(int x, int y) { return x < y ? x : y; }
 
 // 必须选自己才能选子树

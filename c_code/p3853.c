@@ -10,8 +10,7 @@ _Bool check(int dis) {
     int cur = 0, nxt = 1;
     while (nxt < N) {
         int ds = pos[nxt] - pos[cur];
-        if (ds > dis) 
-            cnt += (ds - 1) / dis;
+        if (ds > dis) cnt += (ds - 1) / dis;
         ++cur, ++nxt;
     }
     return cnt <= K;

@@ -1,12 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 
-#define MAXLEN 100
+#define LEN 105
 
-int l1, l2;
-char str1[MAXLEN + 5], str2[MAXLEN + 5];
-int a[MAXLEN + 5], b[MAXLEN + 5];
-int dp[MAXLEN + 5][MAXLEN + 5];
+char str1[LEN], str2[LEN];
+int l1, l2, a[LEN], b[LEN], dp[LEN][LEN];
 
 int table[5][5] = {
     {5, -1, -2, -1, -3},
@@ -45,14 +43,13 @@ int solve()
     // dp[i][j]表示a的前i个碱基和b的前j个碱基的最大相似度
     memset(dp, 0, sizeof(dp));
     for (int i = 1; i <= l1; ++i) 
-    	dp[i][0] = dp[i - 1][0] + table[a[i - 1]][4];
+    	dp[i][0] = dp[i-1][0] + table[a[i-1]][4];
     for (int j = 1; j <= l2; ++j) 
-        dp[0][j] = dp[0][j - 1] + table[b[j - 1]][4];
+        dp[0][j] = dp[0][j-1] + table[b[j-1]][4];
     for (int i = 1; i <= l1; ++i) {
         for (int j = 1; j <= l2; ++j) {
-            int ai = a[i - 1], bj = b[j - 1];
-	        dp[i][j] = max(dp[i - 1][j - 1] + table[ai][bj], 
-		        max(dp[i][j - 1] + table[4][bj], dp[i - 1][j] + table[ai][4]));
+            int ai = a[i-1], bj = b[j-1];
+	        dp[i][j] = max(dp[i-1][j-1] + table[ai][bj], max(dp[i][j-1] + table[4][bj], dp[i-1][j] + table[ai][4]));
         }
     }
     return dp[l1][l2];

@@ -12,12 +12,9 @@ struct DetectCycle {
     bool dfs(int u) {
         vis[u] = Status::visiting;
         for (int v : graph[u]) {
-            if (vis[v] == Status::visiting) 
-                return true;
-            else if (vis[v] == Status::to_visit) {
-                if (dfs(v)) 
-                    return true;
-            }
+            if (vis[v] == Status::visiting) return true;
+            else if (vis[v] == Status::to_visit) 
+                if (dfs(v)) return true;
         }
         vis[u] = Status::visited;
         return false;
@@ -26,8 +23,7 @@ struct DetectCycle {
     bool check_cycle() {
         for (int i = 0; i < n; i++) {
             if (vis[i] == Status::to_visit) {
-                if (dfs(i)) 
-                    return true;
+                if (dfs(i)) return true;
             }
         }
         return false;

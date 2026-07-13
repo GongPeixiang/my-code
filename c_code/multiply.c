@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 
-#define MAXLEN 5000
+#define MAXLEN 5005
 
-char a[MAXLEN + 1], b[MAXLEN + 1], result[MAXLEN * 2 + 5];
-int res[MAXLEN * 2 + 5];
+char a[MAXLEN], b[MAXLEN], result[MAXLEN*2];
+int res[MAXLEN*2];
 char zero[2] = {'0', '\0'};
 
 void multiply(void) 
@@ -19,8 +19,8 @@ void multiply(void)
         int carry = 0;
         for (int j = lb - 1; j >= 0; --j) {
             int x = a[i] - '0', y = b[j] - '0';
-            int tmp = x * y + carry + res[i + j + 1];
-            res[i + j + 1] = tmp % 10;
+            int tmp = x * y + carry + res[i+j+1];
+            res[i+j+1] = tmp % 10;
             carry = tmp / 10;
         }
         if (carry) 

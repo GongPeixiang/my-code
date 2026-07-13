@@ -1,11 +1,10 @@
 #include <stdio.h>
 
-#define MAXN 100000
+#define MAXN 100005
 
 // 巧妙! 转化成求LIS,因为数字各不相同,因此可以这么操作
 
-int N, a[MAXN], b[MAXN], m[MAXN + 5];
-int lis[MAXN + 5], tp = 0;
+int N, a[MAXN], b[MAXN], m[MAXN], lis[MAXN], tp = 0;
 
 int solve()
 {
@@ -14,15 +13,11 @@ int solve()
         int l = 0, r = tp, mid;
         while (l < r) {
             mid = l + (r - l) / 2;
-            if (lis[mid] >= b[i]) 
-                r = mid;
-            else 
-                l = mid + 1;
+            if (lis[mid] >= b[i]) r = mid;
+            else l = mid + 1;
         }
-        if (l != tp) 
-            lis[l] = b[i];
-        else 
-            lis[tp++] = b[i];
+        if (l != tp) lis[l] = b[i];
+        else lis[tp++] = b[i];
     }
     return tp;
 }

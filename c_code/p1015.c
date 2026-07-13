@@ -3,17 +3,16 @@
 #include <stdbool.h>
 #include <ctype.h>
 
-#define MAXLEN 100
+#define MAXLEN 105
 
 int N;
-char num[MAXLEN + 1], rev[MAXLEN + 1];
+char num[MAXLEN], rev[MAXLEN];
 
 bool check() 
 {
     int len = strlen(num);
     for (int i = 0; i < len / 2; ++i) {
-        if (num[i] != num[len - i - 1]) 
-            return false;
+        if (num[i] != num[len-i-1]) return false;
     }
     return true;
 }
@@ -21,8 +20,7 @@ bool check()
 void get_rev() 
 {
     int len = strlen(num);
-    for (int i = 0; i < len; ++i) 
-        rev[i] = num[len - 1 - i];
+    for (int i = 0; i < len; ++i) rev[i] = num[len-1-i];
     rev[len] = '\0';
 }
 
@@ -40,7 +38,7 @@ void add()
     if (carry) {
         num[len + 1] = '\0';
         for (int i = len; i >= 1; --i) 
-            num[i] = num[i - 1];
+            num[i] = num[i-1];
         num[0] = '1';
     }
 }

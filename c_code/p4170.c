@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 
-#define MAXN 50
+#define MAXN 55
 
 int n;
-char str[MAXN + 5];
+char str[MAXN];
 int dp[MAXN][MAXN];
 
 static inline int min(int a, int b) { return a < b ? a : b; }
@@ -17,16 +17,12 @@ int solve()
     for (int len = 2; len <= n; ++len) {
         for (int i = 0; i + len - 1 < n; ++i) {
             int j = i + len - 1;
-            if (str[i] == str[j]) 
-                dp[i][j] = min(dp[i + 1][j], dp[i][j - 1]);
-            else {
-                for (int k = i; k < j; ++k) {
-                    dp[i][j] = min(dp[i][j], dp[i][k] + dp[k + 1][j]);
-                } 
-            }
+            if (str[i] == str[j]) dp[i][j] = min(dp[i+1][j], dp[i][j-1]);
+            else 
+                for (int k = i; k < j; ++k) dp[i][j] = min(dp[i][j], dp[i][k] + dp[k+1][j]);
         }
     }
-    return dp[0][n - 1];
+    return dp[0][n-1];
 }
 
 int main()

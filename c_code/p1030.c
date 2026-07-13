@@ -2,9 +2,9 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define MAXN 8
+#define MAXN 10
 
-char in[MAXN + 1], post[MAXN + 1];
+char in[MAXN], post[MAXN];
 
 typedef struct node {
     char val;
@@ -22,8 +22,7 @@ Node *create_node(char c)
 
 Node *rebuild(int il, int ir, int pl, int pr) 
 {
-    if (pl > pr || il > ir) 
-        return NULL;
+    if (pl > pr || il > ir) return NULL;
     char rc = post[pr];
     int pos = strchr(in, rc) - in;
     Node *root = create_node(rc);
@@ -34,8 +33,7 @@ Node *rebuild(int il, int ir, int pl, int pr)
 
 void print_tree(Node *root) 
 {
-    if (!root) 
-        return;
+    if (!root) return;
     printf("%c", root->val);
     print_tree(root->left);
     print_tree(root->right);

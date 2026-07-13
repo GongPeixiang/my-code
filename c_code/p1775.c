@@ -30,10 +30,8 @@ int main()
     scanf("%d", &N);
     for (int i = 0; i < N; ++i) {
         scanf("%d", &m[i]);
-        if (!i) 
-            sum[i] = m[i];
-        else
-            sum[i] = m[i] + sum[i - 1];
+        if (!i) sum[i] = m[i];
+        else sum[i] = m[i] + sum[i - 1];
     }
     int ans = solve();
     printf("%d\n", ans);

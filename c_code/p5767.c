@@ -1,74 +1,94 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
-#define MAXM 100
-#define MAXN 500
+#define N 505
+#define Q 300000
 
-int M, N, INF = 0x3f3f3f3f;
-int dist[MAXN];
-_Bool g[MAXN][MAXN], close[MAXN];
+int n, dist[N], pq_cnt = 0;
+bool ok[N][N];
+struct Node {
+    int u, g;
+} pq[Q];
 
-// n <= 500, 朴素dijkstra即可
-int solve() {
-    memset(dist, 0x3f, sizeof(dist));
-    memset(close, 0, sizeof(close));
-    dist[0] = 0;
-    for (int i = 0; i < N; ++i) {
-        int m = -1;
-        for (int j = 0; j < N; ++j) {
-            if ((m == -1 || dist[j] < dist[m]) && !close[j]) 
-                m = j;
-        }
-        if (m == -1 || dist[m] == INF) break;
-        close[m] = 1;
-        for (int j = 0; j < N; ++j) {
-            if (!close[j] && g[m][j]) 
-                dist[j] = dist[m] + 1 < dist[j] ? dist[m] + 1 : dist[j];
-        }
+#define swap(T, a, b) do { T tmp = a; a = b; b = tmp; } while(0)
+
+void pq_push(struct Node node) 
+{
+    int cur = pq_cnt;
+    pq[pq_cnt++] = node;
+    while (cur > 0 && pq[cur].g < pq[(cur-1)/2].g) {
+        swap(struct Node, pq[cur], pq[(cur-1)/2]);
+        cur = (cur - 1) / 2;
     }
-    if (dist[N - 1] == INF) return -1;
-    else return dist[N - 1] - 1;
 }
 
-// IO不好写
-int main() {
-    memset(g, 0, sizeof(g));
-    scanf("%d %d", &M, &N);
+struct Node pq_pop() 
+{
+    struct Node ret = pq[0];
+    pq[0] = pq[--pq_cnt];
+    int cur = 0;
+    while (1) {
+        int l = 2 * cur + 1, r = 2 * cur + 2;
+        int small = cur;
+        if (l < pq_cnt && pq[l].g < pq[small].g) small = l;
+        if (r < pq_cnt && pq[r].g < pq[small].g) small = r;
+        if (small == cur) break;
+        swap(struct Node, pq[cur], pq[small]);
+        cur = small;
+    }
+    return ret;
+}
 
-    // 这段很重要
-    while (getchar() != '\n');
-    int c;
-    while ((c=getchar()) == '\n');
-    ungetc(c, stdin);
-
-    int cnt = 0, stop[MAXN];
-    char line[1024];
-    for (int i = 0; i < M; ++i) {
-        cnt = 0;
-        if (!fgets(line, sizeof(line), stdin)) 
-            break;
-        int len = strlen(line);
-        while (len > 0 && (line[len - 1] == '\r' || line[len - 1] == '\n')) 
-            line[--len] = '\0';
-        char *token = strtok(line, " ");
-        while (token != NULL) {
-            int num = atoi(token);
-            stop[cnt++] = num - 1;
-            token = strtok(NULL, " ");
-        }
-        for (int j = 0; j < cnt; ++j) {
-            for (int k = j + 1; k < cnt; ++k) {
-                g[stop[j]][stop[k]] = true;
+int solve() 
+{
+    memset(dist, 0x3f, sizeof(dist));
+    dist[0] = 0;
+    pq_push((struct Node){0, 0});
+    while (pq_cnt != 0) {
+        struct Node cur = pq_pop();
+        int u = cur.u, g = cur.g;
+        if (g > dist[u]) continue;
+        if (u == n - 1) return g - 1;
+        for (int v = 0; v < n; ++v) {
+            if (!ok[u][v]) continue;
+            int ng = g + 1;
+            if (ng < dist[v]) {
+                dist[v] = ng;
+                pq_push((struct Node){v, ng});
             }
         }
     }
+    return -1;
+}
 
+int main() 
+{
+    int m, stop[N], cnt;
+    char line[2*N];
+    scanf("%d %d", &m, &n);
+    while (getchar() != '\n');
+    memset(ok, 0, sizeof(ok));
+    while (m--) {
+        fgets(line, sizeof(line), stdin);
+        line[strcspn(line, "\r\n")] = '\0';
+        cnt = 0;
+        char *tok = strtok(line, " ");
+        while (tok) {
+            stop[cnt++] = atoi(tok) - 1;
+            tok = strtok(NULL, " ");
+        }
+        // the bus is one-way
+        for (int i = 0; i < cnt; ++i) {
+            for (int j = i + 1; j < cnt; ++j) {
+                int u = stop[i], v = stop[j];
+                ok[u][v] = true;
+            }
+        }
+    }
     int ans = solve();
-    if (~ans) 
-        printf("%d\n", ans);
-    else 
-        printf("NO\n");
-
+    if (~ans) printf("%d\n", ans);
+    else printf("NO\n");
     return 0;
 }

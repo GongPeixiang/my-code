@@ -6,7 +6,7 @@
 int n, a[MAXN];
 int dp[MAXN][MAXN];
 
-#define MIN(a, b) ((a) < (b) ? (a) : (b))
+#define min(a, b) ((a) < (b) ? (a) : (b))
 
 int solve() 
 {
@@ -19,11 +19,9 @@ int solve()
     for (int len = 3; len <= n; ++len) {
         for (int i = 0; i + len - 1 < n; ++i) {
             int j = i + len - 1;
-            if (a[i] == a[j]) 
-                dp[i][j] = dp[i + 1][j - 1];
+            if (a[i] == a[j]) dp[i][j] = dp[i + 1][j - 1];
             else 
-                dp[i][j] = MIN(dp[i + 1][j], 
-                        MIN(dp[i][j - 1], dp[i + 1][j - 1])) + 1;
+                dp[i][j] = min(dp[i + 1][j], min(dp[i][j - 1], dp[i + 1][j - 1])) + 1;
         }
     }
     return dp[0][n - 1];
@@ -33,8 +31,7 @@ int solve()
 int main()
 {
     scanf("%d", &n);
-    for (int i = 0; i < n; ++i) 
-        scanf("%d", &a[i]);
+    for (int i = 0; i < n; ++i) scanf("%d", &a[i]);
     int ans = solve();
     printf("%d\n", ans);
     return 0;
