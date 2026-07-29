@@ -1,3 +1,4 @@
+// std=gnu++14
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -76,13 +77,7 @@ inline bool judge(int board[3][3]) {
     return board[0][0] == 8 && board[0][1] == 1 && board[0][2] == 7; 
 }
 
-void clr_screen() {
-#ifdef _WIN32
-    system("cls");
-#else
-    system("clear");
-#endif
-}
+inline void clr_screen() { cout << "\033[2J\033[H" << flush; }
 
 void print_border(const string& title) {
     cout << CYAN << "╔";
