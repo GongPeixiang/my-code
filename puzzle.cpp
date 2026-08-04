@@ -2,13 +2,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#ifdef _WIN32
-    #include <windows.h>
-    #define SLEEP_MS(ms) Sleep(ms)
-#else
-    #include <unistd.h>
-    #define SLEEP_MS(ms) usleep((ms) * 1000)
-#endif
+#define SLEEP_MS(ms) do { std::this_thread::sleep_for(std::chrono::milliseconds(ms)); } while(0)
 
 // it can be proved that an answer always exists
 // the heuristic function does not guarantee consistency
