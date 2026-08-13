@@ -16,15 +16,12 @@ struct Node {
 } q[MAXQ], pre[MAXN][MAXN][4], path[MAXN*MAXN*4+5];
 int path_len, head = 0, tail = 0;
 
-static inline int get_dir(char d) {
-    return strchr(dirs, d) - dirs;
-}
+static inline int get_dir(char d) { return strchr(dirs, d) - dirs; }
 
-static inline int get_turn(char d) {
-    return strchr(turns, d) - turns;
-}
+static inline int get_turn(char d) { return strchr(turns, d) - turns; }
 
-void solve() {
+void solve() 
+{
     memset(vis, 0, sizeof(vis));
     memset(pre, 0xff, sizeof(pre));
     path_len = 0;
@@ -63,14 +60,15 @@ void solve() {
     }
 }
 
-int main() {
+int main() 
+{
     char name[100];
     while (scanf("%s", name) == 1 && strcmp(name, "END") != 0) {
         char ds;
         scanf("%d %d %c %d %d", &sr, &sc, &ds, &dr, &dc);
         sdir = get_dir(ds);
         memset(ok, 0, sizeof(ok));
-        int ch; while ((ch=getchar()) != '\n');
+        while (getchar() != '\n');
         int r, c;
         char line[256];
         while (1) {
