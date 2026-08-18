@@ -1,47 +1,49 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const array<array<int, 2>, 8> dir = {{ {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}, {1, 0}, {1, 1}, {0, 1} }};
+constexpr int N = 105;
+constexpr int dx[8] = {-1, -1, -1, 0, 0, 1, 1, 1}, dy[8] = {-1, 0, 1, -1, 1, -1, 0, 1};
 
-int n, m;
-vector<vector<char>> board;
+int n, m, cnt = 0, ans = 0;
+char grid[N][N];
+bool vis[N][N];
 
-void dfs(vector<vector<bool>> &visited, int row, int col, 
-    int& area) {
-    area++;
-    for (int i = 0; i < 8; ++i) {
-        int nr = row + dir[i][0];
-        int nc = col + dir[i][1];
-        if (nr >= 0 && nr < n && nc >= 0 && nc < m && 
-            !visited[nr][nc] && board[nr][nc] == 'I') {
-                visited[nr][nc] = true;
-                dfs(visited, nr, nc, area);
-            }
+// floodfill
+int bfs(int sr, int sc) {
+    queue<pair<int,int>> q;
+    q.push(make_pair(sr, sc));
+    vis[sr][sc] = true;
+    int area = 1;
+    while (!q.empty()) {
+        int r = q.front().first, c = q.front().second; 
+        q.pop();
+        for (int i = 0; i < 8; i++) {
+            int nr = r + dx[i], nc = c + dy[i];
+            if (nr < 0 || nr >= n || nc < 0 || nc >= m) continue;
+            if (grid[nr][nc] == '.' || vis[nr][nc]) continue;
+            vis[nr][nc] = true;
+            q.push(make_pair(nr, nc));
+            area++;
+        }
     }
+    return area;
 }
 
 int main() {
+    cin.tie(nullptr)->sync_with_stdio(false);
     cin >> n >> m;
-    board.resize(n, vector<char>(m));    
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < m; ++j) {
-            cin >> board[i][j];
-        }
-    }
-    vector<vector<bool>> visited(n, vector<bool>(m, false));
-    int cnt = 0;
-    int max_area = 0;
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < m; ++j) {
-            if (board[i][j] == 'I' && !visited[i][j]) {
-                visited[i][j] = true;
-                int area = 0;
-                dfs(visited, i, j, area);
-                max_area = max(max_area, area);
-                ++cnt;
+    for (int i = 0; i < n; i++) 
+        for (int j = 0; j < m; j++) 
+            cin >> grid[i][j];
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if (grid[i][j] == 'I' && !vis[i][j]) {
+                cnt++;
+                int area = bfs(i, j);
+                ans = max(ans, area);
             }
         }
     }
-    cout << cnt << ' ' << max_area << '\n';
+    cout << cnt << ' ' << ans << '\n';
     return 0;
 }

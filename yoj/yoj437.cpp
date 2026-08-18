@@ -2,26 +2,24 @@
 using namespace std;
 
 constexpr int dx[4] = {-1, 0, 1, 0}, dy[4] = {0, -1, 0, 1};
-constexpr int MAXN = 105;
+constexpr int N = 105;
 
 int n;
-bool vis[MAXN][MAXN];
+bool vis[N][N];
 
 int bfs(int sr, int sc, int dr, int dc) {
-    if (dr == sr && dc == sc) 
-        return 0;
+    if (dr == sr && dc == sc) return 0;
     memset(vis, 0, sizeof(vis));
     vis[sr][sc] = true;
-    queue<pair<int, int>> q;
+    queue<pair<int,int>> q;
     q.push(make_pair(sr, sc));
     int steps = 0;
     while (!q.empty()) {
         int len = q.size();
-        ++steps;
+        steps++;
         while (len--) {
-            pair<int, int> cur = q.front();
-            q.pop();
-            for (int i = 0; i < 4; ++i) {
+            pair<int,int> cur = q.front(); q.pop();
+            for (int i = 0; i < 4; i++) {
                 int nr = cur.first + dx[i], nc = cur.second + dy[i];
                 if (nr == dr && nc == dc)
                     return steps;
