@@ -1,16 +1,16 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-constexpr int MAXN = 105;
+constexpr int N = 105;
 
 int n, p;
-struct Node { int c, u; } node[MAXN];
+struct Node { int c, u; } node[N];
 struct Edge {
     int i, j, w;
-} edge[MAXN * MAXN]; // 链式前向星
+} edge[N*N]; // 链式前向星
 
-int tot = -1, head[MAXN], nxt[MAXN], in[MAXN], out[MAXN];
-bool first[MAXN];
+int tot = -1, head[N], nxt[N], in[N], out[N];
+bool first[N];
 
 inline void add_edge(int i, int j, int w) {
     edge[++tot] = Edge{i, j, w};

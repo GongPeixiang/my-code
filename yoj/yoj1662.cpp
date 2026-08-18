@@ -4,7 +4,7 @@ using namespace std;
 // 原个体域等价于D={0, 1}
 string formula;
 int pos = 0;
-array<bool, 2> is_uni = {false, false}, vals;
+bool is_uni[2] = {false, false}, vals[2];
 
 bool eval(char func, bool m, bool n = false) {
     switch (func) {
@@ -20,16 +20,13 @@ bool parse_term() {
     if (formula[pos] == 'x' || formula[pos] == 'y') {
         ret = vals[formula[pos] - 'x'];
         ++pos;
-    }
-    else if (formula[pos] == 'a') {
+    } else if (formula[pos] == 'a') {
         ret = false;
         ++pos;
-    }
-    else if (formula[pos] == 'f') {
+    } else if (formula[pos] == 'f') {
         pos += 2;
         bool val = parse_term();
-        if (formula[pos] == ')') 
-            ++pos;
+        if (formula[pos] == ')') pos++;
         ret = !val;
     }
     return ret;
@@ -45,8 +42,7 @@ bool parse_formula() {
         }
         else {
             bool m = parse_term();
-            if (formula[pos] == ',') 
-                ++pos;
+            if (formula[pos] == ',') pos++;
             bool n = parse_term();
             return eval(func, m, n);
         }
@@ -82,14 +78,11 @@ bool judge(const int start) {
 }
 
 int main() {
-    if (!getline(cin, formula)) 
-        return 0;
+    if (!getline(cin, formula)) return 0;
     while (formula[pos] == 'V' || formula[pos] == 'E') {
         int idx = formula[pos + 1] - 'x';
-        if (formula[pos] == 'V') 
-            is_uni[idx] = true;
-        else 
-            is_uni[idx] = false;
+        if (formula[pos] == 'V') is_uni[idx] = true;
+        else is_uni[idx] = false;
         pos += 2;
     }
     int start = pos;

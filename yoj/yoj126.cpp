@@ -2,8 +2,7 @@
 using namespace std;
 
 constexpr int dir[3][2] = {{0, -1}, {1, 0}, {0, 1}};
-constexpr int MAXN = 10;
-constexpr int MAXM = 10;
+constexpr int MAXN = 10, MAXM = 10;
 
 int n, m, board[MAXN][MAXM], max_val = 0xcfcfcfcf;
 bool vis[MAXN][MAXM];

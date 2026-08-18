@@ -1,33 +1,28 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int n;
-vector<int> nums;
+constexpr int N = 105, MAXS = 20005;
 
-bool judge() {
-    int sum = 0;
-    for (int i = 0; i < n; ++i) 
-        sum += nums[i];
-    if (sum % 2) 
-        return false;
-    vector<int> dp(sum + 1, false);
+int n, nums[N], sum = 0;
+bool dp[MAXS];
+
+bool solve() {
+    if (sum % 2) return false;
     dp[0] = true;
-    for (int i = 0; i < n; ++i) {
+    for (int i = 0; i < n; i++) {
         int num = nums[i];
-        for (int s = sum; s >= num; --s) {
-            dp[s] = dp[s - num] || dp[s];
-        }
+        for (int j = sum / 2; j >= num; j--) dp[j] |= dp[j-num];
     }
-    return dp[sum / 2];
+    return dp[sum/2];
 }
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
+    cin.tie(nullptr)->sync_with_stdio(false);
     cin >> n;
-    nums.resize(n);
-    for (int i = 0; i < n; ++i) 
+    for (int i = 0; i < n; i++) { 
         cin >> nums[i];
-    bool ans = judge();
-    cout << ans << '\n';
+        sum += nums[i];
+    }
+    cout << solve() << '\n';
+    return 0;
 }

@@ -1,21 +1,24 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-string A, B;
-vector<pair<string, string>> dict;
+constexpr int N = 10, LEN = 20;
 
-bool dfs(int dep, const int max_dep) {
-    if (dep == max_dep) {
-        return A == B;
-    }
+int n = 0, maxdep;
+string A, B;
+struct Item {
+    string key, val;
+} dict[N];
+
+bool dfs(int dep) {
+    if (dep == maxdep) return A == B;
     for (int i = 0; i < A.size(); i++) {
-        for (const auto &[key, value] : dict) {
+        for (int j = 0; j < n; j++) {
+            const string& key = dict[j].key, val = dict[j].val;
             if (A.substr(i, key.size()) == key) {
                 A.erase(i, key.size());
-                A.insert(i, value);
-                if (dfs(dep + 1, max_dep)) 
-                    return true;
-                A.erase(i, value.size());
+                A.insert(i, val);
+                if (dfs(dep + 1)) return true;
+                A.erase(i, val.size());
                 A.insert(i, key);
             }
         }
@@ -24,30 +27,21 @@ bool dfs(int dep, const int max_dep) {
 }
 
 int solve() {
-    for (int max_dep = 0; max_dep <= 10; max_dep++) {
-        if (dfs(0, max_dep)) {
-            return max_dep;
-        }
-    }
+    for (maxdep = 0; maxdep <= 10; maxdep++) 
+        if (dfs(0)) return maxdep;
     return -1;
 }
 
 int main() {
     cin >> A >> B;
-    cin.ignore();
+    cin.ignore(1000, '\n');
     string line, a, b;
     while (getline(cin, line)) {
         stringstream ss(line);
         ss >> a >> b;
-        if (!a.empty() && !b.empty()) {
-            dict.push_back({a, b});
-        }
+        dict[n++] = (Item){a, b};
     }
-
-    int steps = solve();
-
-    if (steps != -1) 
-        cout << steps << '\n';
-    else 
-        cout << "NO ANSWER!\n";
+    int ans = solve();
+    if (~ans) cout << ans << '\n';
+    else cout << "NO ANSWER!\n";
 }

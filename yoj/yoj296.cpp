@@ -1,60 +1,41 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
-struct Student {
-    string code;
-    int p;
-    vector<float> times;
-};
+constexpr int D = 8, S = 8; // 7 days, 7 sessions each day, 1-based
 
-struct TimeCount {
+int n, k, cnt[D][S];
+struct Node {
     float time;
     int cnt;
-};
+    bool operator<(const Node& other) const {
+        if (cnt != other.cnt) return cnt < other.cnt;
+        return time < other.time;
+    }
+} node[D*S];
 
 int main() {
-    int n = 0, k = 0;
+    cin.tie(nullptr)->sync_with_stdio(false);
     cin >> n >> k;
-
-    vector<Student> student;
-    student.resize(n);
-
+    int p, id;  
+    char time[5];
     for (int i = 0; i < n; i++) {
-        cin >> student[i].code >> student[i].p;
-        student[i].times.resize(student[i].p);
-        for (int j = 0; j < student[i].p; j++) {
-            cin >> student[i].times[j];
+        cin >> id >> p;
+        for (int j = 0; j < p; j++) {
+            cin >> time;
+            int d = time[0] - '0'; // keep in 1-based
+            int s = time[2] - '0';
+            cnt[d][s]++;
         }
     }
-
-    vector<TimeCount> timecnt;
-    
-    for (int i = 0; i < 7; i++) {
-        for (int j = 0; j < 7; j++) {
-            float a = (float)j + 1 + 0.1 * ((float)i + 1);
-            int cnt = 0;
-            for (int l = 0; l < n; l++) {
-                for (int m = 0; m < student[l].times.size(); m++) {
-                    if (student[l].times[m] == a) {
-                        cnt++;
-                        break;
-                    }
-                }
-            }
-            timecnt.push_back(TimeCount{a,cnt});
+    int ncnt = 0;
+    for (int d = 1; d < D; d++) {
+        for (int s = 1; s < S; s++) {
+            float time = d + (s / 10.0f);
+            node[ncnt++] = (Node){time, cnt[d][s]};
         }
     }
-
-    auto compare = [] (const TimeCount &a, const TimeCount &b) {
-        if (a.cnt != b.cnt) 
-            return a.cnt < b.cnt;
-        return a.time < b.time;
-    };
-    
-    sort(timecnt.begin(),timecnt.end(),compare);
-    for (int i = 0; i < k; i++) {
-        cout << timecnt[i].time << ' ' << timecnt[i].cnt << endl;
-    }
-
+    sort(node, node + ncnt);
+    for (int i = 0; i < k; i++) 
+        cout << node[i].time << ' ' << node[i].cnt << '\n';
     return 0;
 }

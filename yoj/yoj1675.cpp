@@ -1,11 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-constexpr int MAXN = 105;
-constexpr int MAXM = 15;
+constexpr int N = 105, M = 15;
 
-int n, m, K, f[MAXN][MAXM], tab[MAXN];
-bool isflg[MAXN], reach[MAXN];
+int n, m, K, f[N][M], tab[N];
+bool isflg[N], reach[N];
 vector<int> flg;
 vector<vector<int>> grp;
 
@@ -27,7 +26,7 @@ void preprocess() {
 }
 
 void part() {
-    int blk[MAXN];
+    int blk[N];
     memset(blk, -1, sizeof(blk));
     vector<vector<int>> blocks;
     vector<int> mrk_blk, unmrk_blk;
@@ -47,7 +46,7 @@ void part() {
     bool chg = true;
     while (chg) {
         chg = false;
-        int new_blk[MAXN];
+        int new_blk[N];
         memset(new_blk, -1, sizeof(new_blk));
         vector<vector<int>> tmp_blks;
         
@@ -102,7 +101,7 @@ int main() {
     part();
 
     int n2 = grp.size();
-    int new_id[MAXN], rev[MAXN];
+    int new_id[N], rev[N];
     memset(new_id, -1, sizeof(new_id));
     queue<int> q;
     

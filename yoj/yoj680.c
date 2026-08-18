@@ -11,8 +11,7 @@ int cmp(const void *a, const void *b) { return (int *)b - (int *)a; }
 
 bool check(int pos, int cur_len, int done, const int len, const int div) 
 {
-    if (done == div) 
-        return true;
+    if (done == div) return true;
     if (cur_len == len) 
         if (check(0, 0, done + 1, len, div)) return true;
     for (int i = pos; i < n; ++i) {

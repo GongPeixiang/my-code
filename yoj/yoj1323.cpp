@@ -7,7 +7,7 @@ struct State {
 };
 char g;
 
-inline bool judge(State s) {
+inline bool judge(State& s) {
     return s.m == g && s.b == g && s.h;
 }
 

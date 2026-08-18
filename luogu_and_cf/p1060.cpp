@@ -1,35 +1,27 @@
  #include <bits/stdc++.h>
 using namespace std;
 
+constexpr int M = 30, N = 30005;
+
 struct Item {
     int p, sig; // p代表价格， sig代表重要度
     int val;    // val = p * sig;
-};
-
-int n, m;
-vector<Item> items;
-vector<vector<int>> dp;
+} item[M];
+int n, m, dp[M][N];
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
+    cin.tie(nullptr)->sync_with_stdio(false);
     cin >> n >> m;
-    items.resize(m + 1);
     for (int i = 1; i <= m; i++) {
-        cin >> items[i].p >> items[i].sig;
-        items[i].val = items[i].p * items[i].sig;
+        cin >> item[i].p >> item[i].sig;
+        item[i].val = item[i].p * item[i].sig;
     }
-    dp.resize(m + 1, vector<int>(n + 1, 0));
     for (int i = 1; i <= m; i++) {
         for (int j = 0; j <= n; j++) {
-            if (j < items[i].p) 
-                dp[i][j] = dp[i-1][j];
-            else 
-                dp[i][j] = max(dp[i-1][j], 
-                    dp[i-1][j-items[i].p] + items[i].val);
+            if (j < item[i].p) dp[i][j] = dp[i-1][j];
+            else dp[i][j] = max(dp[i-1][j], dp[i-1][j-item[i].p] + item[i].val);
         }
     }
-    int ans = dp[m][n];
-    cout << ans << '\n';
+    cout << dp[m][n] << '\n';
     return 0;
 }

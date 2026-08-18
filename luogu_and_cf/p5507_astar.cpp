@@ -2,6 +2,7 @@
 using namespace std;
 
 using ll = long long;
+
 constexpr ll MAXCODE = 1ll << 24;
 constexpr int tgt[12] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
@@ -9,11 +10,10 @@ int stat[12], cnnct[12][4], best_g[MAXCODE+5];
 vector<int> path;
 
 struct Node {
-    ll code; int op;
+    ll code; 
+    int op;
     int g, f;
-    bool operator<(const Node& other) const {
-        return f > other.f;
-    }
+    bool operator<(const Node& other) const { return f > other.f; }
 } pre[MAXCODE+5];
 
 ll encode() {
@@ -98,7 +98,6 @@ int main() {
     }
     solve();
     cout << path.size() << '\n';
-    for (int op: path) 
-        cout << op + 1 << ' ';
+    for (int op: path) cout << op + 1 << ' ';
     return 0;
 }

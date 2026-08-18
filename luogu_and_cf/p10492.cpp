@@ -5,8 +5,7 @@ constexpr int MAXN = 365;
 constexpr int dx[9] = {0, 0, 0, 0, 0, 1, 2, -1, -2};
 constexpr int dy[9] = {0, 1, 2, -1, -2, 0, 0, 0, 0};
 
-int N, sched[MAXN][4][4];
-int memo[MAXN][4][4][8][8][8][8];
+int N, sched[MAXN][4][4], memo[MAXN][4][4][8][8][8][8];
 
 bool check(int d, int cx, int cy) {
     for (int i = cx; i <= cx + 1; ++i) {

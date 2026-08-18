@@ -1,26 +1,24 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+constexpr int N = 55;
+
+int n;
+string base, seq[N];
+
+bool cmp(const string& a, const string& b) {
+    for (int i = 0; i < a.size(); i++) {
+        int p1 = base.find(a[i]), p2 = base.find(b[i]);
+        if (p1 != p2) return p1 < p2;
+    }
+    return false;
+}
+
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    int n;
-    string standard;
-    cin >> n >> standard;
-    vector<string> Seq(n);
-    for (int i = 0; i < n; i++) 
-        cin >> Seq[i];
-    auto cmp = [standard] (const string &a, const string &b) {
-        if (a != b) {
-            for (int i = 0; i < a.size(); i++) {
-                int pos_1 = standard.find(a[i]), pos_2 = standard.find(b[i]);
-                if (pos_1 != pos_2)
-                    return pos_1 < pos_2;
-            }
-        }
-        return false;
-    };
-    sort(Seq.begin(), Seq.end(), cmp);
-    for (string str : Seq) 
-        cout << str << '\n';
+    cin.tie(nullptr)->sync_with_stdio(false);
+    cin >> n >> base;
+    for (int i = 0; i < n; i++) cin >> seq[i];
+    sort(seq, seq + n, cmp);
+    for (string str : seq) cout << str << '\n';
+    return 0;
 }

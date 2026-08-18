@@ -1,8 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const array<array<int, 2>, 8> dir = {{ {-1, 1}, {-1, 0}, {-1, -1}, 
-    {0, -1}, {1, -1}, {1, 0}, {1, 1}, {0, 1} }};
+const array<array<int, 2>, 8> dir = {{ {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}, {1, 0}, {1, 1}, {0, 1} }};
 
 int n, m;
 vector<vector<char>> board;

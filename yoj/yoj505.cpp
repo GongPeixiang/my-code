@@ -5,7 +5,7 @@ using ll = long long;
 constexpr int MAXN = 105;
 
 int n, m, k;
-struct Student {
+struct Stu {
     ll num;
     vector<int> s;
 } stu[MAXN];
@@ -20,7 +20,7 @@ int main() {
     float sum = 0;
     for (int i = 0; i < n; i++) sum += stu[i].s[k-1];
     float ave = sum / n;
-    sort(stu, stu + n, [](const Student& a, const Student& b) {
+    sort(stu, stu + n, [](const Stu& a, const Stu& b) {
         if (a.s[k-1] != b.s[k-1]) return a.s[k-1] > b.s[k-1];
         return a.num < b.num;
     });

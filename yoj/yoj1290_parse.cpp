@@ -86,12 +86,9 @@ void solve() {
             bool bit = (i >> (n - 1 - j)) & 1;
             vals[j] = bit;
         }
-
         pos = 0;
         bool result = eval_formula();
-
-        for (auto val : vals) 
-            cout << val << ' ';
+        for (auto val : vals) cout << val << ' ';
         cout << result << '\n';
     } 
 }

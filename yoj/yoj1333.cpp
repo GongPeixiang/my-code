@@ -7,15 +7,12 @@ int cnt = 0;
 
 void dfs(int dep, int sum) {
     // prunning
-    if (sum > m || sum + (n - dep) * max_b < m) 
-        return;
+    if (sum > m || sum + (n - dep) * max_b < m) return;
     if (dep == n && sum == m) {
-        ++cnt;
+        cnt++;
         return;
     }
-    for (int i = 0; i <= b[dep]; ++i) {
-        dfs(dep + 1, sum + i);
-    }
+    for (int i = 0; i <= b[dep]; ++i) dfs(dep + 1, sum + i);
 }
 
 int main() {

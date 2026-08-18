@@ -18,6 +18,16 @@ int f(int x) {
     return dp[x];
 }
 
+void print_ans(int i) {
+    cout << i << ' ';
+    for (int j = 0; j < n; j++) {
+        if (ok[i][j] && dp[i] == dp[j] + 1) {
+            print_ans(j);
+            break;
+        }
+    }
+}
+
 int main() {
     cin.tie(nullptr)->sync_with_stdio(false);
     int T;
@@ -34,9 +44,15 @@ int main() {
                     ok[i][j] = true;
             }
         }
-        int ans = 1;
-        for (int i = 0; i < n; i++) ans = max(ans, f(i));
+        int ans = 1, pos = -1;
+        for (int i = 0; i < n; i++) { 
+            if (f(i) > ans) {
+                ans = dp[i];
+                pos = i;
+            }
+        }
         cout << ans << '\n';
+        print_ans(pos);
     }
     return 0;
 }

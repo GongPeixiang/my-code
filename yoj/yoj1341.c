@@ -3,8 +3,7 @@
 
 #define MAXM 10
 
-int m, n, a[MAXM][MAXM], res[MAXM][MAXM];
-int tmp[MAXM][MAXM];
+int m, n, a[MAXM][MAXM], res[MAXM][MAXM], tmp[MAXM][MAXM];
 
 void init() 
 {
