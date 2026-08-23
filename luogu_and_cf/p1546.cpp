@@ -6,8 +6,10 @@ constexpr int N = 105;
 
 int n, g[N][N], dist[N];
 bool vis[N];
-struct Node { int u, w; };
-bool operator<(const Node& a, const Node& b) { return a.w > b.w; }
+struct Node { 
+    int u, w; 
+    bool operator<(const Node& other) const { return w > other.w; }
+};
 
 ll prim() {
     memset(dist, 0x3f, sizeof(dist));
