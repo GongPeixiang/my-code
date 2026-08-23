@@ -8,7 +8,7 @@ bool inq[N*3];
 struct Edge { int v, w; };
 vector<Edge> g[N*3];
 
-#define t(x,i) (x + i * n)
+#define t(x,i) (x + (i) * n)
 
 inline void add_edge(int x, int y) {
     g[t(x,0)].push_back((Edge){t(y,0), 0});

@@ -1,10 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-constexpr int MAXM = 105;
+constexpr int M = 105;
 constexpr int dx[4] = {-1, 0, 0, 1}, dy[4] = {0, -1, 1, 0};
 
-int m, maze[MAXM][MAXM], dist[MAXM][MAXM][2][3];
+int m, maze[M][M], dist[M][M][2][3];
 struct Node {
     int x, y, c; bool mag;
     int g;
