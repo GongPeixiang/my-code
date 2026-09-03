@@ -14,7 +14,7 @@ int solve() {
     memset(dist, 0x3f, sizeof(dist));
     priority_queue<Node> pq;
     dist[0] = 0;
-    pq.push(Node{0, 0});
+    pq.push((Node){0, 0});
     while (!pq.empty()) {
         Node cur = pq.top(); pq.pop();
         int u = cur.u, g = cur.g;
@@ -25,7 +25,7 @@ int solve() {
                 int ng = g + 1;
                 if (ng < dist[v]) {
                     dist[v] = ng;
-                    pq.push(Node{v, ng});
+                    pq.push((Node){v, ng});
                 }
             }
         }
@@ -34,7 +34,7 @@ int solve() {
 }
 
 int main() {
-    cin.tie(nullptr)->sync_with_stdio(false);
+    cin.tie(0)->sync_with_stdio(false);
     int m, stop[N], cnt = 0;
     string line;
     cin >> m >> n;
@@ -43,9 +43,16 @@ int main() {
     while (m--) {
         getline(cin, line);
         cnt = 0;
+        char* tok = strtok(&line[0], " ");
+        while (tok) {
+            stop[cnt++] = atoi(tok) - 1;
+            tok = strtok(nullptr, " ");
+        }
+        /* 也可以用stringstream,但是性能较差
         stringstream ss(line);
         int num = 0;
-        while (ss >> num) stop[cnt++] = num - 1;
+        while (ss >> num) stop[cnt++] = num - 1; 
+        */
         for (int i = 0; i < cnt; ++i) {
             for (int j = i + 1; j < cnt; ++j) {
                 int u = stop[i], v = stop[j];

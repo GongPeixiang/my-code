@@ -2,18 +2,18 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define MAXN 10
-#define MAXQ 15000
+#define N 10
+#define Q 15000
 
 const int dx[4] = {-1, 0, 1, 0}, dy[4] = {0, 1, 0, -1};
 const char dirs[] = "NESW", turns[] = "LFR";
 
 int sr, sc, dr, dc, sdir;
-int vis[MAXN][MAXN][4],ok[MAXN][MAXN][4][3]; // (i+3)%4, i%4, (i+1)%4
+int vis[N][N][4],ok[N][N][4][3]; // (i+3)%4, i%4, (i+1)%4
 
 struct Node {
     int r, c, dir;
-} q[MAXQ], pre[MAXN][MAXN][4], path[MAXN*MAXN*4+5];
+} q[Q], pre[N][N][4], path[N*N*4+5];
 int path_len, head = 0, tail = 0;
 
 static inline int get_dir(char d) { return strchr(dirs, d) - dirs; }

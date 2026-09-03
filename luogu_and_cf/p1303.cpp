@@ -1,36 +1,35 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-string multiply(const string &a, const string &b) {
-    if (a == "0" || b == "0") 
-        return "0";
-    int len1 = a.size(), len2 = b.size();
-    vector<int> res(len1 + len2, 0);
-    for (int i = len1 - 1; i >= 0; --i) {
-        int carry = 0;
-        for (int j = len2 - 1; j >= 0; --j) {
-            int x = a[i] - '0', y = b[j] - '0';
-            int tmp = x * y + carry + res[i + j + 1];
-            res[i + j + 1] = tmp % 10;
-            carry = tmp / 10;
+const int N = 20005;
+
+string a, b;
+int x[N], y[N], res[N*2];
+
+string multi() {
+    memset(res, 0, sizeof(res));
+    int la = a.size(), lb = b.size();
+    for (int i = 0; i < la; i++) x[i] = a[la-1-i] - '0';
+    for (int i = 0; i < lb; i++) y[i] = b[lb-1-i] - '0';
+    for (int i = 0; i < la; i++) 
+        for (int j = 0; j < lb; j++) 
+            res[i+j] += x[i] * y[j];
+    for (int i = 0; i < la + lb + 5; i++) { // 小心处理最高位
+        if (res[i] > 9) {
+            res[i+1] += res[i] / 10;
+            res[i] %= 10;
         }
-        if (carry) 
-            res[i] += carry;
     }
-    int i = 0;
-    while (res[i] == 0) 
-        ++i;
-    string result = "";
-    for (; i < res.size(); ++i) 
-        result += res[i] + '0';
-    return result;
+    int l = la + lb;
+    while (res[l] == 0 && l > 0) l--;
+    string ans = "";
+    for (int i = l; i >= 0; i--)  ans += (char)(res[i] + '0');
+    return ans;
 }
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    string a, b;
+    cin.tie(0)->sync_with_stdio(false);
     cin >> a >> b;
-    string ans = multiply(a, b);
-    cout << ans << '\n';
+    cout << multi() << '\n';
+    return 0;
 }
