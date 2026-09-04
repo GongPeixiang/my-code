@@ -186,7 +186,6 @@ int minimax(int dep, int alpha, int beta, bool is_max) {
         int x = mov / 15, y = mov % 15;
         board[x][y] = color;
         cur_hash ^= zob[x][y][color];
-        ull sav_hash = cur_hash;
         int score = minimax(dep + 1, alpha, beta, !is_max);
         cur_hash ^= zob[x][y][color];
         board[x][y] = -1;
@@ -194,19 +193,26 @@ int minimax(int dep, int alpha, int beta, bool is_max) {
             maxs = max(score, maxs);
             alpha = max(maxs, alpha);
             if (alpha >= beta) {
-                tt.save(sav_hash, dep, alpha, 2);
+                tt.save(cur_hash, dep, alpha, 2);
                 return alpha;
             }
         } else {
             mins = min(score, mins);
             beta = min(mins, beta);
             if (beta <= alpha) {
-                tt.save(sav_hash, dep, beta, 1);
+                tt.save(cur_hash, dep, beta, 1);
                 return beta;
             }
         }
     }
-    return is_max ? maxs : mins;
+    if (is_max) {
+        tt.save(cur_hash, dep, maxs, 0);
+        return maxs;
+    } else {
+        tt.save(cur_hash, dep, mins, 0);
+        return mins;
+    }
+    return -1;
 }
 
 inline void gotoxy(int x, int y) {   
