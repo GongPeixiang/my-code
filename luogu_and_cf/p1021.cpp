@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-constexpr int K = 20;
+const int K = 20;
 
 int n, k, val[K], ans[K], maxsum = 0, dp[10000];
 
@@ -34,11 +34,10 @@ void solve(int dep) {
 }
 
 int main() {
-    cin.tie(nullptr)->sync_with_stdio(false);
-    cin >> n >> k;
+    scanf("%d%d", &n, &k);
     val[0] = ans[0] = 1;
     solve(1);
-    for (int i = 0; i < k; i++) cout << ans[i] << " \n"[i == k-1];
-    cout << "MAX=" << maxsum << '\n';
+    for (int i = 0; i < k; i++) printf("%d%c", ans[i], " \n"[i==k-1]);
+    printf("MAX=%d\n", maxsum);
     return 0;
 }

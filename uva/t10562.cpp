@@ -1,48 +1,51 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-constexpr int MAXN = 205;
+const int N = 550;
 
-int n;
-string buf[MAXN];
+char g[N][N], str[N];
+int n = 0, p = 0;
 
-void dfs(int dep, int c) {
-    cout << buf[dep][c] << '(';
-    if (dep + 3 < n && buf[dep+1][c] == '|') {
-        int i = c;
-        while (i - 1 >= 0 && buf[dep+2][i-1] == '-') --i;
-        while (i < buf[dep+2].size() && buf[dep+2][i] == '-' && i < buf[dep+3].size()) {
-            if (buf[dep+3][i] != ' ') 
-                dfs(dep + 3, i);
-            ++i;
-        } 
+void sft(int dep, int l, int r) {
+    for (int i = l; i <= r; i++) {
+        if (g[dep][i] != ' ' && g[dep][i] != '\0') {
+            str[p++] = g[dep][i];
+            str[p++] = '(';
+            if (g[dep+1][i] == '|') {
+                int nl = i, nr = i;
+                while (g[dep+2][nl] == '-') nl--;
+                while (g[dep+2][nr] == '-') nr++;
+                nl++; nr--;
+                if (nl < 0) nl = 0;
+                if (dep + 3 < n) sft(dep + 3, nl, nr);
+            }
+            str[p++] = ')';
+        }
     }
-    cout << ')';
 }
 
 int main() {
-    cin.tie(nullptr)->sync_with_stdio(false);
     int T;
-    cin >> T;
-    cin.ignore(1000, '\n');
+    scanf("%d", &T);
+    while (getchar() != '\n');
     while (T--) {
+        memset(g, '\0', sizeof(g));
         n = 0;
-        for (auto &str: buf) str.clear();
         while (1) {
-            getline(cin, buf[n]);
-            if (buf[n][0] == '#') break;
-            else ++n;
+            fgets(g[n], sizeof(g[n]), stdin);
+            g[n][strcspn(g[n], "\r\n")] = '\0';
+            if (strcmp(g[n], "#")==0) break;
+            n++;
         }
-        cout << '(';
+        p = 0;
+        str[p++] = '(';
         if (n) {
-            for (int i = 0; i < buf[0].size(); ++i) {
-                if (buf[0][i] != ' ') {
-                    dfs(0, i);
-                    break;
-                }
-            }
+            int l = 0, r = strlen(g[0]) - 1;
+            sft(0, l, r);
         }
-        cout << ')' << '\n';
+        str[p++] = ')';
+        str[p++] = '\0';
+        printf("%s\n", str);
     }
     return 0;
 }

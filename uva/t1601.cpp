@@ -1,11 +1,11 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-constexpr int MAXW = 20, MAXN = 150;
-constexpr int dx[5] = {0, -1, 0, 1, 0}, dy[5] = {0, 0, 1, 0, -1};
+const int W = 20, N = 150;
+const int dx[5] = {0, -1, 0, 1, 0}, dy[5] = {0, 0, 1, 0, -1};
 // the direction array is only used in preprocess
 
-int deg[MAXN], g[MAXN][5], src[3], dst[3], dist[MAXN][MAXN][MAXN];
+int deg[N], g[N][5], src[3], dst[3], dist[N][N][N];
 struct Node { int a, b, c; };
 
 inline bool illegal(int x, int y, int nx, int ny) { 
@@ -42,9 +42,9 @@ int solve() {
 
 int main() {
     cin.tie(nullptr)->sync_with_stdio(false);
-    char maze[MAXW][MAXW];
+    char maze[W][W];
     int w, h, sum;
-    int cnt = 0, x[MAXN], y[MAXN], id[MAXW][MAXW];
+    int cnt = 0, x[N], y[N], id[W][W];
     while (cin >> w >> h >> sum) {
         if (!w && !h && !sum) break;
         cnt = 0;

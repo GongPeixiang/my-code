@@ -1,45 +1,44 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-constexpr int LEN = 32;
+const int N = 32, L = 1024;
 
-int vis[LEN][LEN], cnt = 0;
-string str;
+char str[L];
+int dep = 0, g[N][N], cnt = 0;
 
-void dfs(int &dep, int le, int ri, int up, int lo) {
+void draw(int r, int c, int len) {
     char ch = str[dep++];
     if (ch == 'f') {
-        for (int i = le; i < ri; ++i) {
-            for (int j = up; j < lo; ++j) {
-                if (!vis[i][j]) {
-                    vis[i][j] = 1;
-                    ++cnt;
-                }
+        for (int i = r; i < r + len; i++) {
+            for (int j = c; j < c + len; j++) {
+                if (g[i][j]) continue;
+                g[i][j] = 1;
+                cnt++;
             }
         }
+        return;
     } else if (ch == 'p') {
-        int mid1 = le + (ri - le) / 2 , mid2 = up + (lo - up) / 2;
-        dfs(dep, mid1, ri, up, mid2);
-        dfs(dep, le, mid1, up, mid2);
-        dfs(dep, le, mid1, mid2, lo);
-        dfs(dep, mid1, ri, mid2, lo);
+        len /= 2;
+        draw(r + len, c, len);
+        draw(r, c, len);
+        draw(r, c + len, len);
+        draw(r + len, c + len, len);
     }
     return;
 }
 
 int main() {
-    cin.tie(nullptr)->sync_with_stdio(false);
-    int N;
-    cin >> N;
-    while (N--) {
-        memset(vis, 0, sizeof(vis));
-        cnt = 0;
-        for (int i = 0; i < 2; ++i) {
-            cin >> str;
-            int dep = 0;
-            dfs(dep, 0, LEN, 0, LEN);
-        }
-        cout << "There are " << cnt << " black pixels.\n";
+    int T;
+    scanf("%d", &T);
+    while (T--) {
+        memset(g, 0, sizeof(g));  cnt = 0;
+        dep = 0;
+        scanf("%s", str);
+        draw(0, 0, N);
+        dep = 0;
+        scanf("%s", str);
+        draw(0, 0, N);
+        printf("There are %d black pixels.\n", cnt);
     }
     return 0;
 }
