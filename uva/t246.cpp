@@ -5,17 +5,35 @@ deque<int> pile[7];
 queue<int> q;
 bool ok[7], tgt[7] ={0,0,0,0,0,0,0};
 
+// 只有这种并不优雅的方法判重
+struct State {
+    deque<int> _p[7];
+    queue<int> _q;
+    bool operator<(const State& other) const {
+        for (int i = 0; i < 7; i++) 
+            if (_p[i] != other._p[i]) return _p[i] < other._p[i];
+        return _q < other._q;
+    }
+};
+set<State> s;
+
 int solve(int& ans) { // -1:loss; 0:draw; 1:win
+    ans = 0;
     for (int i = 0; i < 7; i++) {
         int num = q.front(); q.pop();
+        ans++;
         pile[i].push_back(num);
     }
     memset(ok, 1, sizeof(ok));
     int id = -1;
-    ans = 0;
+    State stat;
     while (!q.empty()) {
         if (memcmp(ok, tgt, sizeof(tgt))==0) return 1;
-        else if (q.size() == 52) return 0;
+        // if (q.size() == 52) return 0;
+        for (int i = 0; i < 7; i++) stat._p[i] = pile[i];
+        stat._q = q;
+        if (s.count(stat)) return 0;
+        s.insert(stat);
         ans++;
         int num = q.front(); q.pop();
         id = (id + 1) % 7;
@@ -53,6 +71,7 @@ int solve(int& ans) { // -1:loss; 0:draw; 1:win
             } else break;
             sz = pile[id].size();
         }
+
     }
     return -1;
 }
@@ -63,6 +82,7 @@ int main() {
         for (int i = 0; i < 7; i++) pile[i].clear();
         // queue<int>().swap(q);
         while (q.size()) q.pop();
+        s.clear();
         for (int i = 0; i < 52; i++) {
             scanf("%d", &num);
             if (!num) return 0;

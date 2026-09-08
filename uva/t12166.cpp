@@ -1,18 +1,24 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-string str;
+const int N = 1024;
 
-int solve() {
-    
+int p = 0, dp[20][2];
+char str[N];
+
+void solve(int dep) {
+    char ch = str[p];
+    if (ch == '[') {
+        
+    }
 }
 
 int main() {
-    cin.tie(nullptr)->sync_with_stdio(false);
     int T;
-    cin >> T;
+    scanf("%d", &T);
     while (T--) {
-        cin >> str;
-
+        scanf("%s", str);
+        p = 0;
+        memset(dp, 0, sizeof(dp));
     }
 }

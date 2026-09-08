@@ -1,50 +1,40 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-void get_next(const string &pattern, vector<int> &next) {
-    if (pattern.size() < 2) 
-        return;
-    next.resize(pattern.size());
-    next[0] = next[1] = 0;
-    int cur = 2, cmp = 0;
-    while (cur < pattern.size()) {
-        if (pattern[cur - 1] == pattern[cmp]) 
-            next[cur++] = ++cmp;
-        else if (cmp > 0) 
-            cmp = next[cmp];
-        else 
-            next[cur++] = 0;
+const int N = 1000500;
+
+int n, m, nxt[N];
+char txt[N], pat[N];
+vector<int> pos;
+
+void get_nxt() {
+    memset(nxt, 0, sizeof(nxt));
+    int j = 0;
+    for (int i = 1; i < m; i++) {
+        while (j > 0 && pat[i] != pat[j]) j = nxt[j-1];
+        if (pat[i] == pat[j]) j++;
+        nxt[i] = j;
     }
 }
 
-vector<int> kmp_search(const string &text, const string &pattern) {
-    vector<int> next, pos;
-    get_next(pattern, next);
-    int i = 0, j = 0;
-    while (i < text.size()) {
-        if (text[i] == pattern[j]) {
-            i++;
-            j++;
-        }
-        else if (j > 0) 
-            j = next[j];
-        else 
-            i++;
-
-        if (j == pattern.size()) {
-            pos.push_back(i - pattern.size());
-            j = next[pattern.size() - 1];
+void kmp() {
+    get_nxt();
+    int j = 0;
+    for (int i = 0; i < n; i++) {
+        while (j > 0 && txt[i] != pat[j]) j = nxt[j-1];
+        if (txt[i] == pat[j]) j++;
+        if (j == m) {
+            pos.push_back(i - m + 1);
+            j = nxt[j-1];
         }
     }
-    return pos;
 }
 
 int main() {
-    string text, pattern;
-    cin >> text >> pattern;
-    vector<int> pos = kmp_search(text, pattern);
-    for (auto p : pos) 
-        cout << p << ' ';
-    cout << '\n';
+    scanf("%s %s", txt, pat);
+    n = strlen(txt); m = strlen(pat);
+    kmp();
+    for (int i = 0; i < pos.size(); i++) printf("%d\n", pos[i]);
+    for (int i = 0; i < m; i++) printf("%d%c", nxt[i], " \n"[i==m-1]);
     return 0;
 }
