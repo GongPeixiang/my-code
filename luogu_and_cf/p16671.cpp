@@ -3,9 +3,9 @@ using namespace std;
 
 typedef long long ll;
 
-const int T = 10;
-const int M = 100005, N = 30; // alphabet:26 in total
-const ll INF = 0X3f3f3f3f3f3f3f3f;
+constexpr int T = 10;
+constexpr int M = 100005, N = 30; // alphabet:26 in total
+constexpr ll INF = 0x3f3f3f3f3f3f3f3f;
 
 char t[N];
 int m, tg[N], u[M], v[M], w[M], msk[M];

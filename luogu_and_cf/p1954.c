@@ -70,7 +70,7 @@ int solve(int x)
     while (pq_cnt) {
         int cur = pq_pop();
         if (cur == x) continue;
-        if (n - tot > t[cur]) continue;
+        if (n - tot > t[cur]) break;
         tot++;
         for (int i = head[cur]; ~i; i = e[i].nxt) {
             int to = e[i].to;
