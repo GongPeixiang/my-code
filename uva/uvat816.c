@@ -20,8 +20,7 @@ static inline int get_dir(char d) { return strchr(dirs, d) - dirs; }
 
 static inline int get_turn(char d) { return strchr(turns, d) - turns; }
 
-void solve() 
-{
+void solve() {
     memset(vis, 0, sizeof(vis));
     memset(pre, 0xff, sizeof(pre));
     path_len = 0;
@@ -60,8 +59,7 @@ void solve()
     }
 }
 
-int main() 
-{
+int main() {
     char name[100];
     while (scanf("%s", name) == 1 && strcmp(name, "END") != 0) {
         char ds;
@@ -90,8 +88,7 @@ int main()
         }
         solve();
         printf("%s\n", name);
-        if (path_len == 0) 
-            printf("  No Solution Possible\n");
+        if (path_len == 0) printf("  No Solution Possible\n");
         else {
             for (int i = 0; i < path_len; ++i) {
                 if (i % 10 == 0) printf(" ");

@@ -21,8 +21,7 @@ int pq_cnt = 0, dist[MAXS], path[MAXP], path_cnt = 0;
 
 static inline bool check() { return memcmp(board, tgt, sizeof(tgt)) == 0; }
 
-int encode() // cantor
-{
+int encode() /*cantor*/ {
     int res = 0, cnt = 0;
     for (int i = 0; i < 3; ++i) {
         for (int j = 0; j < 3; ++j) {
@@ -38,8 +37,7 @@ int encode() // cantor
     return res;
 }
 
-void decode(int code, int *zr, int *zc) 
-{
+void decode(int code, int *zr, int *zc) {
     int cnt = 8, num[9] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
     for (int i = 0; i < 9; ++i) {
         int rk = code / fact[8-i], val = num[rk];
@@ -50,8 +48,7 @@ void decode(int code, int *zr, int *zc)
     }
 }
 
-int h() 
-{
+int h() {
     int cnt = 0;
     for (int i = 0; i < 3; ++i) {
         for (int j = 0; j < 3; ++j) {
@@ -63,8 +60,7 @@ int h()
     return cnt;
 }
 
-void pq_push(struct Node node) 
-{
+void pq_push(struct Node node) {
     int cur = pq_cnt;
     pq[pq_cnt++] = node;
     while (cur > 0 && pq[cur].f < pq[(cur-1)/2].f) {
@@ -73,8 +69,7 @@ void pq_push(struct Node node)
     }
 }
 
-struct Node pq_pop() 
-{
+struct Node pq_pop() {
     struct Node ret = pq[0];
     pq[0] = pq[--pq_cnt];
     int cur = 0;
@@ -90,8 +85,7 @@ struct Node pq_pop()
     return ret;
 }
 
-bool solve() 
-{
+bool solve() {
     memset(dist, 0x3f, sizeof(dist));
     int init_stat = encode();
     struct Node init = (struct Node){init_stat, 0, h()};
@@ -131,8 +125,7 @@ bool solve()
     return false;
 }
 
-int main() 
-{
+int main() {
     printf("please enter your initial board:\n");
     for (int i = 0; i < 3; ++i) 
         for (int j = 0; j < 3; ++j) 
