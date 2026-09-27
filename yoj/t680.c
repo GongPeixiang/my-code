@@ -2,39 +2,36 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#define MAXN 15
+#define N 15
 
-int n, l[MAXN], sum = 0; 
-bool vis[MAXN];
+int n, a[N], sum = 0; 
+bool vis[N];
 
 int cmp(const void *a, const void *b) { return (int *)b - (int *)a; }
 
-bool check(int pos, int cur_len, int done, const int len, const int div) 
-{
+bool check(int pos, int l, int done, const int len, const int div) {
     if (done == div) return true;
-    if (cur_len == len) 
+    if (l == len) 
         if (check(0, 0, done + 1, len, div)) return true;
     for (int i = pos; i < n; ++i) {
-        if (!vis[i] && cur_len + l[i] <= len) {
-            vis[i] = true; 
-            if (check(i + 1, cur_len + l[i], done, len, div)) 
-                return true;
-            vis[i] = false;
+        if (!vis[i] && l + a[i] <= len) {
+            vis[i] = 1; 
+            if (check(i+1, l+a[i], done, len, div)) return true;
+            vis[i] = 0;
         }
     }
     return false;
 }
 
-int main() 
-{
+int main() {
     scanf("%d", &n);
     for (int i = 0; i < n; ++i) {
-        scanf("%d", &l[i]);
-        sum += l[i];
+        scanf("%d", &a[i]);
+        sum += a[i];
     }
-    qsort(l, n, sizeof(int), cmp);
+    qsort(a, n, sizeof(int), cmp);
     int ans = sum;
-    for (int len = l[0]; len <= sum; ++len) {
+    for (int len = a[0]; len <= sum; ++len) {
         if (sum % len != 0) continue;
         int div = sum / len;
         if (check(0, 0, 0, len, div)) {

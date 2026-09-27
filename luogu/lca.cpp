@@ -8,24 +8,6 @@ constexpr int N = 10005;
 vector<int> g[N];
 int n, up[N][31], dep[N];
 
-void precalc() {
-    stack<pii> st;
-    st.push(make_pair(0,0)); // {root,root};
-    dep[0] = 0;
-    while (!st.empty()) {
-        auto tmp = st.top(); st.pop();
-        int u = tmp.first, p = tmp.second;
-        up[u][0] = p;
-        for (int k = 1; k < 31; k++) up[u][k] = up[up[u][k-1]][k-1];
-        for (int v: g[u]) {
-            if (v != p) {
-                dep[v] = dep[u] + 1;
-                st.push(make_pair(v,u));
-            }
-        }
-    }
-}
-
 void dfs(int u, int p) {
     up[u][0] = p;
     for (int k = 1; k < 31; k++) up[u][k] = up[up[u][k-1]][k-1];
@@ -59,6 +41,6 @@ int main() {
         g[u].push_back(v);
         g[v].push_back(u);
     }
-    // precalc();
     dfs(0,0);
+    return 0;
 }

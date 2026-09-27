@@ -4,8 +4,7 @@
 
 int n, board[N][N], cnt = 1;
 
-void draw(int tr, int tc, int dr, int dc, int sz) 
-{
+void draw(int tr, int tc, int dr, int dc, int sz) {
     if (sz == 1) return;
     int t = cnt++, s = sz / 2;
 
@@ -34,8 +33,7 @@ void draw(int tr, int tc, int dr, int dc, int sz)
     }
 }
 
-int main() 
-{
+int main() {
     int k, cx, cy;
     scanf("%d %d %d", &k, &cx, &cy);
     n = k ? (1 << k) : 1;

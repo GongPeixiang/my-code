@@ -60,6 +60,7 @@ int main() {
     while (getchar() != '\n');
     for (int i = 1; i <= n; i++) {
         fgets(buf, sizeof(buf), stdin);
+        buf[strcspn(buf, "\n")] = '\0';
         int j = 0;
         char* tok = strtok(buf, " ");
         while (tok) {

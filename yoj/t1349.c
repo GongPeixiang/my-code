@@ -9,8 +9,7 @@
 int n, rgs[MAXN], cnt = 0;
 char str[MAXN], res[MAXCNT][2 * MAXN], tmp[2 * MAXN];
 
-void dfs(int pos, int part) 
-{
+void dfs(int pos, int part) {
     if (pos == n) {
         memset(tmp, 0, sizeof(tmp));
         int tp = 0;
@@ -33,13 +32,11 @@ void dfs(int pos, int part)
     dfs(pos + 1, part + 1);
 }
 
-int cmp(const void *a, const void *b) 
-{
+int cmp(const void *a, const void *b) {
     return strcmp((const char *)a, (const char *)b);
 }
 
-int main() 
-{
+int main() {
     scanf(" %s", str);
     n = strlen(str);
     memset(rgs, 0xff, sizeof(rgs));
@@ -47,7 +44,6 @@ int main()
     dfs(1, 0);
     qsort(res, cnt, sizeof(res[0]), cmp);
     printf("%d\n", cnt);
-    for (int i = 0; i < cnt; ++i) 
-        printf("%s\n", res[i]);
+    for (int i = 0; i < cnt; ++i) printf("%s\n", res[i]);
     return 0;
 }

@@ -31,8 +31,7 @@ const u32 K[64] = {
     0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
 };
 
-void message_padding() 
-{
+void message_padding() {
     size_t l = strlen((const char *)str) * 8;
     str[str_tp++] = 0x80;
     while ((str_tp * 8) % 512 != 448) 
@@ -52,8 +51,7 @@ static inline u32 Sigma1(u32 x) { return rotr(x, 6) ^ rotr(x, 11) ^ rotr(x, 25);
 static inline u32 ch(u32 x, u32 y, u32 z) { return (x & y) ^ ((~x) & z); }
 static inline u32 maj(u32 x, u32 y, u32 z) { return (x & y) ^ (x & z) ^ (y & z); }
 
-void block_and_sched() 
-{
+void block_and_sched() {
     for (int i = 0; i < (str_tp * 8) / 512; ++i) {
         for (int j = 0; j < 16; ++j) {
             // 手动转小端序存储,不能直接(u32 *)
@@ -66,8 +64,7 @@ void block_and_sched()
     }
 }
 
-void main_compress() 
-{
+void main_compress() {
     u32 t1, t2;
     for (int i = 0; i < (str_tp * 8) / 512; ++i) {
         a = h[0]; b = h[1]; c = h[2]; d = h[3];
@@ -84,8 +81,7 @@ void main_compress()
     }
 }
 
-int main() 
-{
+int main() {
     scanf("%s", (char *)str);
     str_tp = strlen((const char *)str);
     message_padding();
