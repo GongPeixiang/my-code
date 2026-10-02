@@ -2,10 +2,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-typedef long long ll;
-typedef pair<int,ll> pil;
-
-#define INF 0x3f3f3f3f3f3f3f3f
+using ll = long long;
+using pil = pair<int,ll>;
 
 constexpr int N = 400005, M = 400005;
 
@@ -17,7 +15,7 @@ struct Edge {
     bool operator<(const Edge& other) const { return h > other.h; }
 } e[M];
 vector<pil> g[N]; // 原图仅用于dijkstra
-map<int, vector<int>> tr; // 重构树必须单独新建一个图
+vector<int> tr[N]; // 重构树必须单独新建一个图
 
 int find(int x) { return x == fa[x] ? x : fa[x] = find(fa[x]); }
 
@@ -47,7 +45,7 @@ void dij() {
 
 void kruskal() {
     tot = n;
-    for (int i = 1; i <= n; i++) val[i] = INF;
+    for (int i = 1; i <= n; i++) val[i] = LLONG_MAX/2;
     for (int i = 0; i < m; i++) {
         int u = e[i].u, v = e[i].v;
         ll h = e[i].h;
@@ -78,7 +76,7 @@ void dfs(int u, int p) {
 // kruskal重构树可以不用dfs构建
 void build() {
     for (int i = 1; i <= n; i++) mn[i] = dis[i];
-    for (int i = n+1; i <= tot; i++) mn[i] = INF;
+    for (int i = n+1; i <= tot; i++) mn[i] = LLONG_MAX/2;
     for (int i = n+1; i <= tot; i++) 
         for (int v: tr[i]) mn[i] = min(mn[i], mn[v]);
     for (int i = 1; i <= tot; i++) up[i][0] = pa[i];
@@ -100,11 +98,11 @@ int main() {
     scanf("%d", &T);
     while (T--) {
         scanf("%d%d", &n, &m);
-        for (int i = 1; i <= n; i++) {
+        for (int i = 1; i <= 2*n; i++) {
             fa[i] = i;
             g[i].clear();
+            tr[i].clear();
         }
-        tr.clear();
         for (int i = 0; i < m; i++) {
             scanf("%d%d%lld%lld", &e[i].u, &e[i].v, &e[i].w, &e[i].h);
             // 建原图，用于dijkstra
