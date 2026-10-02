@@ -1,22 +1,33 @@
+/*
+Q: 如何想到这个思路?
+A:
+dp[i][j] = ∑ k=1...j dp[i-j][k],这需要3层循环
+
+优化：注意到 dp[i-1][j-1] = ∑ k=1...(j-1) dp[i-1][k] 
+
+于是, dp[i][j] = dp[i-1][j-1] + dp[i-j][j];
+*/
+
 #include <bits/stdc++.h>
 using namespace std;
 
-constexpr int MAXN = 205, MAXK = 10;
+constexpr int N = 205, K = 7;
 
-int n, k, dp[MAXN][MAXK];
+int n, k, dp[N][K];
 
-int main() {
-    cin >> n >> k;
+int solve() {
+    for (int i = 1; i <= n; i++) dp[i][1] = 1;
     for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= k; j++) {
-            if (j == 1 || j == i) 
-                dp[i][j] = 1;
-            else if (j < i) 
-                dp[i][j] = dp[i-1][j-1] + dp[i-j][j];
-            else if (j > i)
-                dp[i][j] = 0;
+        for (int j = 2; j <= k; j++) {
+            dp[i][j] = dp[i-1][j-1];
+            if (i > j) dp[i][j] += dp[i-j][j];
         }
     }
-    cout << dp[n][k] << '\n';
-    return 0;
+    return dp[n][k];
+}
+
+int main() {
+    scanf("%d%d", &n, &k);
+    int ans = solve();
+    printf("%d\n", ans);
 }
