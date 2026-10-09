@@ -8,7 +8,7 @@ const int N = 100005, M = 600005;
 int n, m, tot = 0, fa[N], dep[N], up[N][18], dis[N][18];
 struct Edge {
     int u, v, w;
-    bool operator<(const Edge& o) { return w < o.w; }
+    bool operator<(const Edge& o) const { return w < o.w; }
 } e[M];
 bool vis[M];
 vector<pii> g[N];
