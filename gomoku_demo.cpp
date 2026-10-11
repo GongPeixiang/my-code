@@ -279,11 +279,11 @@ void usr_turn() {
     display_board();
 }
 
-bool check_end(bool *win, bool *loss, bool *full) {
+bool check_end(bool& win, bool& loss, bool& full) {
     int score = eval();
-    if (score == INF) { *win = true; *loss = false; return true; }
-    if (score == -INF) { *win = false; *loss = true; return true; }
-    if (is_full()) { *win = false; *loss = false; *full = true; return true; }
+    if (score == INF) { win = 1; loss = 0; return true; }
+    if (score == -INF) { win = 0; loss = 1; return true; }
+    if (is_full()) { win = 0; loss = 0; full = 1; return true; }
     return false;
 }
 
@@ -299,15 +299,15 @@ int main() {
     printf("Rows and columns are 0-indexed (0-14).\n");
     printf("You are %c, AI is %c\n\n", sft(usrcolor), sft(mycolor));
     display_board();
-    bool win = false, loss = false, full = false;
-    while (!check_end(&win, &loss, &full)) {
+    bool win = 0, loss = 0, full = 0;
+    while (!check_end(win, loss, full)) {
         if (usrcolor == 0) {
             usr_turn();
-            if (check_end(&win, &loss, &full)) break;
+            if (check_end(win, loss, full)) break;
             my_turn();
         } else {
             my_turn();
-            if (check_end(&win, &loss, &full)) break;
+            if (check_end(win, loss, full)) break;
             usr_turn();
         }
     }
