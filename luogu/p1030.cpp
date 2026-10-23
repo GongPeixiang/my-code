@@ -1,46 +1,26 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-constexpr int LEN = 10;
+const int LEN = 10;
 
-struct Node {
-    char data;
-    Node* left; Node* right;
-    Node() : left(nullptr), right(nullptr) {}
-    Node(char val) : data(val), left(nullptr), right(nullptr) {}
-};
 char in[LEN], post[LEN];
+string pre;
 
-Node* build_tree(int is, int ie, int ps, int pe) {
-    if (is > ie) return nullptr;
-    char rtval = post[pe];
-    Node* root = new Node(rtval);
-    int pos = strchr(in, rtval) - in;
-    root->left = build_tree(is, pos-1, ps, ps+pos-1-is);
-    root->right = build_tree(pos+1, ie, ps+pos-is, pe-1);
-    return root;
-}
-
-void dfs(Node* root) {
-    if (!root) return;
-    printf("%c", root->data);
-    dfs(root->left);
-    dfs(root->right);
-}
-
-void free_bst(Node* root) {
-    if (!root) return;
-    free_bst(root->left);
-    free_bst(root->right);
-    delete root;
+void build(int il, int ir, int pl, int pr) {
+    if (il > ir || pl > pr) return;
+    char root = post[pr];
+    pre += root;
+    int k;
+    for (k = il; k <= ir; k++) if (in[k] == root) break;
+    int sz = k - il;
+    build(il, k-1, pl, pl+sz-1);
+    build(k+1, ir, pl+sz, pr-1);
 }
 
 int main() {
     scanf("%s%s", in, post);
-    int len = strlen(in);
-    Node* root = build_tree(0, len-1, 0, len-1);
-    dfs(root);
-    putchar('\n');
-    free_bst(root);
+    int n = strlen(in);
+    build(0, n-1, 0, n-1);
+    printf("%s\n", pre.c_str());
     return 0;
 }
