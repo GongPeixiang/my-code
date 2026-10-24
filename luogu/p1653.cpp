@@ -1,14 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-constexpr int H = 505, N = H*H;
-constexpr int E = N*4;
+constexpr int H = 505, N = H*H, E = N*4;
 
-int W, L, h[H][H];
+int W, L, h[H][H], in[N], out[N];
 int head[N], to[E], nxt[E], ecnt = -1;
-stack<int> stk;
-int dfn[N], low[N], dfncnt = 0, vis[N], scc[N], scc_cnt = 0;
-int in[N], out[N];
 
 void add_edge(int x, int y, int xx, int yy) {
     if (xx < 0 || xx >= L || yy < 0 || yy >= W) return;
@@ -19,33 +15,37 @@ void add_edge(int x, int y, int xx, int yy) {
     head[u] = ecnt;
 }
 
-void tar(int u) {
-    dfn[u] = low[u] = ++dfncnt;
+namespace tar {
+int dfn[N], low[N], timer = 0, scc[N], scnt = 0;
+stack<int> stk;
+bool vis[N];
+
+void dfs(int u) {
+    dfn[u] = low[u] = ++timer;
     vis[u] = 1;
     stk.push(u);
     for (int i = head[u]; ~i; i = nxt[i]) {
         int v = to[i];
         if (!dfn[v]) {
-            tar(v);
+            dfs(v);
             low[u] = min(low[u], low[v]);
-        } else if (vis[v] == 1) {
-            low[u] = min(low[u], dfn[v]);
-        }
+        } else if (vis[v] == 1) low[u] = min(low[u], dfn[v]);
     }
     if (low[u] == dfn[u]) {
         int v;
-        scc_cnt++;
+        scnt++;
         do {
             v = stk.top(); stk.pop();
             vis[v] = 2;
-            scc[v] = scc_cnt;
+            scc[v] = scnt;
         } while (v != u);
     }
+}
 }
 
 int main() {
     memset(head, -1, sizeof(head));
-    cin.tie(nullptr)->sync_with_stdio(false);
+    cin.tie(0)->sync_with_stdio(false);
     cin >> W >> L;
     for (int i = 0; i < L; i++) 
         for (int j = 0; j < W; j++) 
@@ -59,19 +59,19 @@ int main() {
         }
     }
     for (int i = 0; i < W*L; i++) 
-        if (!dfn[i]) tar(i);
-    if (scc_cnt == 1) { cout << "0\n"; return 0; }
+        if (!tar::dfn[i]) tar::dfs(i);
+    if (tar::scnt == 1) { cout << "0\n"; return 0; }
     for (int u = 0; u < W*L; u++) {
         for (int i = head[u]; ~i; i = nxt[i]) {
             int v = to[i];
-            if (scc[u] != scc[v]) {
-                in[scc[v]]++;
-                out[scc[u]]++;
+            if (tar::scc[u] != tar::scc[v]) {
+                in[tar::scc[v]]++;
+                out[tar::scc[u]]++;
             }
         }
     }
     int p = 0, q = 0;
-    for (int i = 1; i <= scc_cnt; i++) {
+    for (int i = 1; i <= tar::scnt; i++) {
         if (!in[i]) p++;
         if (!out[i]) q++;
     }

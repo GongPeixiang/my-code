@@ -14,6 +14,7 @@ inline void add_edge(int u, int v, int w) {
     head[u] = ecnt++;
 }
 
+// dp的第二维是用户数量，可用sz进行剪枝
 void dfs(int u) {
     for (int i = head[u]; ~i; i = e[i].nxt) {
         int v = e[i].to, w = e[i].w;
