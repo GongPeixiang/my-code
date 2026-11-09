@@ -16,7 +16,7 @@ ll prim() {
     memset(vis, 0, sizeof(vis));
     priority_queue<Node, vector<Node>> pq;
     dist[0] = 0;
-    pq.push(Node{0, 0});
+    pq.push((Node){0, 0});
     ll ans = 0, cnt = 0;
     while (!pq.empty()) {
         Node cur = pq.top(); pq.pop();
@@ -27,7 +27,7 @@ ll prim() {
         for (int i = 0; i < n; ++i) {
             if (!vis[i] && g[u][i] < dist[i]) {
                 dist[i] = g[u][i];
-                pq.push(Node{i, dist[i]});
+                pq.push((Node){i, dist[i]});
             }
         }
     }

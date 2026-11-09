@@ -1,39 +1,32 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int n, steps = 0;
+const int N = 105;
 
-void recursion(vector<int> &arr, int start) {
-    if (is_sorted(arr.begin(), arr.end())) 
-        return;
-    auto min_it = min_element(arr.begin() + start, arr.end());
-    int min_pos = distance(arr.begin(), min_it);
-    if (min_pos == start) {
-        recursion(arr, start + 1);
-        return;
+int n, a[N], step = 0;
+
+void recur(int s) {
+    if (s == n) return;
+    int p = s;
+    for (int i = s+1; i <= n; i++) if (a[i] < a[p]) p = i;
+    if (p == s) recur(s+1);
+    else {
+        swap(a[s], a[p]);
+        step++;
+        int tmp[N];
+        memcpy(tmp, a, sizeof(a));
+        recur(s+1);
+        printf("%d<->%d:", s, p);
+        for (int i = 1; i <= n; i++) printf("%d%c", tmp[i], " \n"[i==n]);
     }
-    steps++;
-    swap(arr[start], arr[min_pos]);
-    vector<int> tmp = arr;
-    recursion(arr, start + 1);
-    cout << start + 1 << "<->" << min_pos + 1 << ':';
-    for (auto num : tmp) 
-        cout << num << ' ';
-    cout << '\n';
 }
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cin >> n;
-    vector<int> arr(n);
-    for (int i = 0; i < n; i++) 
-        cin >> arr[i];
-    recursion(arr, 0);
-    cout << "Total steps:" << steps << '\n';
-    cout << "Right order:";
-    for (auto num : arr) 
-        cout << num << ' ';
-    cout << '\n';
+    scanf("%d", &n);
+    for (int i = 1; i <= n; i++) scanf("%d", &a[i]);
+    recur(1);
+    printf("Total steps:%d\n", step);
+    printf("Right order:");
+    for (int i = 1; i <= n; i++) printf("%d%c", a[i], " \n"[i==n]);
     return 0;
 }

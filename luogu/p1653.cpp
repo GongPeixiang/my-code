@@ -1,18 +1,18 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-constexpr int H = 505, N = H*H, E = N*4;
+constexpr int H = 505, N = H*H;
 
 int W, L, h[H][H], in[N], out[N];
-int head[N], to[E], nxt[E], ecnt = -1;
+struct Edge { int to, nxt; } e[N*4];
+int hd[N], ecnt = 0;
 
-void add_edge(int x, int y, int xx, int yy) {
+inline void add_edge(int x, int y, int xx, int yy) {
     if (xx < 0 || xx >= L || yy < 0 || yy >= W) return;
     if (h[x][y] < h[xx][yy]) return;
-    int u = x * W + y, v = xx * W + yy;
-    to[++ecnt] = v;
-    nxt[ecnt] = head[u];
-    head[u] = ecnt;
+    int u = x*W + y, v = xx*W + yy;
+    e[ecnt] = (Edge){v, hd[u]};
+    hd[u] = ecnt++;
 }
 
 namespace tar {
@@ -24,8 +24,8 @@ void dfs(int u) {
     dfn[u] = low[u] = ++timer;
     vis[u] = 1;
     stk.push(u);
-    for (int i = head[u]; ~i; i = nxt[i]) {
-        int v = to[i];
+    for (int i = hd[u]; ~i; i = e[i].nxt) {
+        int v = e[i].to;
         if (!dfn[v]) {
             dfs(v);
             low[u] = min(low[u], low[v]);
@@ -36,7 +36,7 @@ void dfs(int u) {
         scnt++;
         do {
             v = stk.top(); stk.pop();
-            vis[v] = 2;
+            vis[v] = 0;
             scc[v] = scnt;
         } while (v != u);
     }
@@ -44,7 +44,7 @@ void dfs(int u) {
 }
 
 int main() {
-    memset(head, -1, sizeof(head));
+    memset(hd, -1, sizeof(hd));
     cin.tie(0)->sync_with_stdio(false);
     cin >> W >> L;
     for (int i = 0; i < L; i++) 
@@ -52,18 +52,20 @@ int main() {
             cin >> h[i][j];
     for (int i = 0; i < L; i++) {
         for (int j = 0; j < W; j++) {
-            add_edge(i, j, i - 1, j);
-            add_edge(i, j, i + 1, j);
-            add_edge(i, j, i, j - 1);
-            add_edge(i, j, i, j + 1);
+            add_edge(i, j, i-1, j);
+            add_edge(i, j, i+1, j);
+            add_edge(i, j, i, j-1);
+            add_edge(i, j, i, j+1);
         }
     }
-    for (int i = 0; i < W*L; i++) 
-        if (!tar::dfn[i]) tar::dfs(i);
-    if (tar::scnt == 1) { cout << "0\n"; return 0; }
+    for (int i = 0; i < W*L; i++)  if (!tar::dfn[i]) tar::dfs(i);
+    if (tar::scnt == 1) { 
+        cout << "0\n"; 
+        return 0; 
+    }
     for (int u = 0; u < W*L; u++) {
-        for (int i = head[u]; ~i; i = nxt[i]) {
-            int v = to[i];
+        for (int i = hd[u]; ~i; i = e[i].nxt) {
+            int v = e[i].to;
             if (tar::scc[u] != tar::scc[v]) {
                 in[tar::scc[v]]++;
                 out[tar::scc[u]]++;

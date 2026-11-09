@@ -22,17 +22,13 @@ int dfs(int r, int c) {
 int main() {
     memset(memo, 0xff, sizeof(memo));
     cin >> R >> C;
-    for (int i = 0; i < R; i++) {
-        for (int j = 0; j < C; j++) {
+    for (int i = 0; i < R; i++) 
+        for (int j = 0; j < C; j++) 
             cin >> h[i][j];
-        }
-    }
     int ans = 0;
-    for (int i = 0; i < R; i++) {
-        for (int j = 0; j < C; j++) {
+    for (int i = 0; i < R; i++) 
+        for (int j = 0; j < C; j++) 
             ans = max(ans, dfs(i, j));
-        }
-    }
     cout << ans << '\n';
     return 0;
 }
